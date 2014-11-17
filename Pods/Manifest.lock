@@ -1,0 +1,61 @@
+PODS:
+  - AFNetworking (2.4.1):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+    - AFNetworking/UIKit
+  - AFNetworking/NSURLConnection (2.4.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.4.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.4.1)
+  - AFNetworking/Security (2.4.1)
+  - AFNetworking/Serialization (2.4.1)
+  - AFNetworking/UIKit (2.4.1):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - CocoaLumberjack (1.9.2):
+    - CocoaLumberjack/Extensions
+  - CocoaLumberjack/Core (1.9.2)
+  - CocoaLumberjack/Extensions (1.9.2):
+    - CocoaLumberjack/Core
+  - MMDrawerController (0.5.7):
+    - MMDrawerController/Core
+    - MMDrawerController/MMDrawerBarButtonItem
+    - MMDrawerController/MMDrawerVisualStates
+    - MMDrawerController/Subclass
+  - MMDrawerController/Core (0.5.7)
+  - MMDrawerController/MMDrawerBarButtonItem (0.5.7):
+    - MMDrawerController/Core
+  - MMDrawerController/MMDrawerVisualStates (0.5.7):
+    - MMDrawerController/Core
+  - MMDrawerController/Subclass (0.5.7):
+    - MMDrawerController/Core
+  - OBDragDrop (1.0.0)
+  - YapDatabase (2.5.3):
+    - YapDatabase/standard
+  - YapDatabase/common (2.5.3):
+    - CocoaLumberjack (~> 1)
+  - YapDatabase/standard (2.5.3):
+    - YapDatabase/common
+
+DEPENDENCIES:
+  - AFNetworking (~> 2.0)
+  - MMDrawerController (~> 0.5.7)
+  - OBDragDrop
+  - YapDatabase
+
+SPEC CHECKSUMS:
+  AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
+  CocoaLumberjack: 205769c032b5fef85b92472046bcc8b7e7c8a817
+  MMDrawerController: c3ab7a318ddc7e2bcd133139c3161af08c6e1197
+  OBDragDrop: 45e232a3df0b9f8aa94a92f6b7512d9177019ec0
+  YapDatabase: 096e860167b04e629b88bea33dfb7a4153279bb0
+
+COCOAPODS: 0.34.4
