@@ -16,7 +16,7 @@
 		F15791B01A1A1E730011B2BD /* OCBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791AF1A1A1E730011B2BD /* OCBaseViewController.m */; };
 		F15791B31A1A1E950011B2BD /* OCBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791B21A1A1E950011B2BD /* OCBaseTableViewController.m */; };
 		F15791B61A1A1EDE0011B2BD /* OCAccountsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791B51A1A1EDE0011B2BD /* OCAccountsViewController.m */; };
-		F15791B91A1A1F0D0011B2BD /* OCFIlesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791B81A1A1F0D0011B2BD /* OCFIlesViewController.m */; };
+		F15791B91A1A1F0D0011B2BD /* OCFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791B81A1A1F0D0011B2BD /* OCFilesViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,8 +49,8 @@
 		F15791B21A1A1E950011B2BD /* OCBaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCBaseTableViewController.m; sourceTree = "<group>"; };
 		F15791B41A1A1EDE0011B2BD /* OCAccountsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCAccountsViewController.h; sourceTree = "<group>"; };
 		F15791B51A1A1EDE0011B2BD /* OCAccountsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCAccountsViewController.m; sourceTree = "<group>"; };
-		F15791B71A1A1F0D0011B2BD /* OCFIlesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCFIlesViewController.h; sourceTree = "<group>"; };
-		F15791B81A1A1F0D0011B2BD /* OCFIlesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCFIlesViewController.m; sourceTree = "<group>"; };
+		F15791B71A1A1F0D0011B2BD /* OCFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCFilesViewController.h; sourceTree = "<group>"; };
+		F15791B81A1A1F0D0011B2BD /* OCFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCFilesViewController.m; sourceTree = "<group>"; };
 		F4F3E6A1E62A9BC550D7E993 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,8 +161,8 @@
 				F15791B21A1A1E950011B2BD /* OCBaseTableViewController.m */,
 				F15791B41A1A1EDE0011B2BD /* OCAccountsViewController.h */,
 				F15791B51A1A1EDE0011B2BD /* OCAccountsViewController.m */,
-				F15791B71A1A1F0D0011B2BD /* OCFIlesViewController.h */,
-				F15791B81A1A1F0D0011B2BD /* OCFIlesViewController.m */,
+				F15791B71A1A1F0D0011B2BD /* OCFilesViewController.h */,
+				F15791B81A1A1F0D0011B2BD /* OCFilesViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -316,7 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F15791B91A1A1F0D0011B2BD /* OCFIlesViewController.m in Sources */,
+				F15791B91A1A1F0D0011B2BD /* OCFilesViewController.m in Sources */,
 				F15791B61A1A1EDE0011B2BD /* OCAccountsViewController.m in Sources */,
 				F157918C1A1A12410011B2BD /* AppDelegate.m in Sources */,
 				F15791891A1A12410011B2BD /* main.m in Sources */,
