@@ -1,1 +1,1 @@
-../../../Dropbox-iOS-SDK/dropbox-ios-sdk-1.2.3/DropboxSDK.framework/Headers/DropboxSDK.h
+../../../Dropbox-iOS-SDK/dropbox-ios-sdk-1.3.13/DropboxSDK.framework/Headers/DropboxSDK.h

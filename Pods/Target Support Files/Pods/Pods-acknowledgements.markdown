@@ -47,7 +47,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ## Dropbox-iOS-SDK
 
-Copyright (c) 2010 Dropbox (Evenflow, Inc.), http://getdropbox.com/
+Copyright (c) 2010-2013 Dropbox, Inc., http://www.dropbox.com/
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

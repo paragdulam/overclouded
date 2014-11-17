@@ -3,4 +3,4 @@ pod "AFNetworking", "~> 2.0"
 pod "YapDatabase"
 pod "OBDragDrop"
 pod 'Mantle'
-pod 'Dropbox-iOS-SDK', '~> 1.2.3'
+pod 'Dropbox-iOS-SDK'
