@@ -1,23 +1,23 @@
 PODS:
-  - AFNetworking (2.4.1):
+  - AFNetworking (2.5.0):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
     - AFNetworking/UIKit
-  - AFNetworking/NSURLConnection (2.4.1):
+  - AFNetworking/NSURLConnection (2.5.0):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.4.1):
+  - AFNetworking/NSURLSession (2.5.0):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.4.1)
-  - AFNetworking/Security (2.4.1)
-  - AFNetworking/Serialization (2.4.1)
-  - AFNetworking/UIKit (2.4.1):
+  - AFNetworking/Reachability (2.5.0)
+  - AFNetworking/Security (2.5.0)
+  - AFNetworking/Serialization (2.5.0)
+  - AFNetworking/UIKit (2.5.0):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - CocoaLumberjack (1.9.2):
@@ -25,6 +25,7 @@ PODS:
   - CocoaLumberjack/Core (1.9.2)
   - CocoaLumberjack/Extensions (1.9.2):
     - CocoaLumberjack/Core
+  - Dropbox-iOS-SDK (1.2.3)
   - Mantle (1.5.1):
     - Mantle/extobjc
   - Mantle/extobjc (1.5.1)
@@ -50,14 +51,16 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
+  - Dropbox-iOS-SDK (~> 1.2.3)
   - Mantle
   - MMDrawerController (~> 0.5.7)
   - OBDragDrop
   - YapDatabase
 
 SPEC CHECKSUMS:
-  AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
+  AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
   CocoaLumberjack: 205769c032b5fef85b92472046bcc8b7e7c8a817
+  Dropbox-iOS-SDK: 497a50c96e087c117ada0e4f18213204fa1465ea
   Mantle: d7c5ac734579ec751c58fecbf56189853056c58c
   MMDrawerController: c3ab7a318ddc7e2bcd133139c3161af08c6e1197
   OBDragDrop: 45e232a3df0b9f8aa94a92f6b7512d9177019ec0
