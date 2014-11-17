@@ -25,6 +25,9 @@ PODS:
   - CocoaLumberjack/Core (1.9.2)
   - CocoaLumberjack/Extensions (1.9.2):
     - CocoaLumberjack/Core
+  - Mantle (1.5.1):
+    - Mantle/extobjc
+  - Mantle/extobjc (1.5.1)
   - MMDrawerController (0.5.7):
     - MMDrawerController/Core
     - MMDrawerController/MMDrawerBarButtonItem
@@ -47,6 +50,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
+  - Mantle
   - MMDrawerController (~> 0.5.7)
   - OBDragDrop
   - YapDatabase
@@ -54,6 +58,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
   CocoaLumberjack: 205769c032b5fef85b92472046bcc8b7e7c8a817
+  Mantle: d7c5ac734579ec751c58fecbf56189853056c58c
   MMDrawerController: c3ab7a318ddc7e2bcd133139c3161af08c6e1197
   OBDragDrop: 45e232a3df0b9f8aa94a92f6b7512d9177019ec0
   YapDatabase: 096e860167b04e629b88bea33dfb7a4153279bb0
