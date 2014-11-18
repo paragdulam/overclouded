@@ -10,10 +10,14 @@
 #import "OCAccountsViewController.h"
 #import "OCFilesViewController.h"
 #import "MMDrawerController.h"
-#import "DropboxSDK.h"
+#import <DropboxSDK/DropboxSDK.h>
 
 
-@interface AppDelegate ()
+@interface AppDelegate ()<DBSessionDelegate,DBNetworkRequestDelegate>
+
+
+@property (nonatomic) OCAccountsViewController *accountsViewController;
+@property (nonatomic) OCFilesViewController *filesViewController;
 
 @end
 
@@ -29,11 +33,13 @@
     [self.window setBackgroundColor:[UIColor whiteColor]];
     [self.window setTintColor:[UIColor whiteColor]];
     
-    OCAccountsViewController *accountsViewController = [[OCAccountsViewController alloc] init];
-    UINavigationController *accountsNavController = [[UINavigationController alloc] initWithRootViewController:accountsViewController];
+    OCAccountsViewController *accountsVC = [[OCAccountsViewController alloc] init];
+    self.accountsViewController = accountsVC;
+    UINavigationController *accountsNavController = [[UINavigationController alloc] initWithRootViewController:self.accountsViewController];
     
-    OCFilesViewController *filesViewController = [[OCFilesViewController alloc] init];
-    UINavigationController *filesNavController = [[UINavigationController alloc] initWithRootViewController:filesViewController];
+    OCFilesViewController *filesVC = [[OCFilesViewController alloc] init];
+    self.filesViewController = filesVC;
+    UINavigationController *filesNavController = [[UINavigationController alloc] initWithRootViewController:self.filesViewController];
     
     MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:filesNavController
                                                                            leftDrawerViewController:accountsNavController];
@@ -52,13 +58,22 @@
     [[DBSession alloc] initWithAppKey:appKey appSecret:appSecret root:root];
     session.delegate = self; // DBSessionDelegate methods allow you to handle re-authenticating
     [DBSession setSharedSession:session];
-    [session release];
     
     [DBRequest setNetworkRequestDelegate:self];
 
 
     
     return YES;
+}
+
+
+-(BOOL) application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    BOOL retVal = [[DBSession sharedSession] handleOpenURL:url];
+    if (retVal) {
+        [self.accountsViewController dropboxDidLink];
+    }
+    return retVal;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -82,5 +97,28 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+#pragma mark - DBSessionDelegate
+
+- (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId
+{
+    
+}
+
+
+#pragma mark - DBNetworkRequestDelegate
+
+- (void)networkRequestStarted
+{
+    
+}
+
+- (void)networkRequestStopped
+{
+    
+}
+
+
 
 @end

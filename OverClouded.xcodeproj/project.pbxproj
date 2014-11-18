@@ -17,6 +17,10 @@
 		F15791B31A1A1E950011B2BD /* OCBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791B21A1A1E950011B2BD /* OCBaseTableViewController.m */; };
 		F15791B61A1A1EDE0011B2BD /* OCAccountsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791B51A1A1EDE0011B2BD /* OCAccountsViewController.m */; };
 		F15791B91A1A1F0D0011B2BD /* OCFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791B81A1A1F0D0011B2BD /* OCFilesViewController.m */; };
+		F16885BB1A1B15E10030FF33 /* OCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = F16885BA1A1B15E10030FF33 /* OCAccount.m */; };
+		F16885BE1A1B15FD0030FF33 /* OCFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F16885BD1A1B15FD0030FF33 /* OCFile.m */; };
+		F171622B1A1B292900C749DD /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F171622A1A1B292900C749DD /* DropboxSDK.framework */; };
+		F171622E1A1B2DB500C749DD /* OCAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = F171622D1A1B2DB500C749DD /* OCAccountController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +46,7 @@
 		F157919C1A1A12420011B2BD /* OverCloudedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OverCloudedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F15791A11A1A12420011B2BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F15791A21A1A12420011B2BD /* OverCloudedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OverCloudedTests.m; sourceTree = "<group>"; };
-		F15791AC1A1A17550011B2BD /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		F15791AC1A1A17550011B2BD /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		F15791AE1A1A1E730011B2BD /* OCBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCBaseViewController.h; sourceTree = "<group>"; };
 		F15791AF1A1A1E730011B2BD /* OCBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCBaseViewController.m; sourceTree = "<group>"; };
 		F15791B11A1A1E950011B2BD /* OCBaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCBaseTableViewController.h; sourceTree = "<group>"; };
@@ -51,6 +55,14 @@
 		F15791B51A1A1EDE0011B2BD /* OCAccountsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCAccountsViewController.m; sourceTree = "<group>"; };
 		F15791B71A1A1F0D0011B2BD /* OCFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCFilesViewController.h; sourceTree = "<group>"; };
 		F15791B81A1A1F0D0011B2BD /* OCFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCFilesViewController.m; sourceTree = "<group>"; };
+		F16885B91A1B15E10030FF33 /* OCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCAccount.h; sourceTree = "<group>"; };
+		F16885BA1A1B15E10030FF33 /* OCAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCAccount.m; sourceTree = "<group>"; };
+		F16885BC1A1B15FD0030FF33 /* OCFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCFile.h; sourceTree = "<group>"; };
+		F16885BD1A1B15FD0030FF33 /* OCFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCFile.m; sourceTree = "<group>"; };
+		F16885BF1A1B16A50030FF33 /* OCConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCConstants.h; sourceTree = "<group>"; };
+		F171622A1A1B292900C749DD /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxSDK.framework; sourceTree = "<group>"; };
+		F171622C1A1B2DB500C749DD /* OCAccountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCAccountController.h; sourceTree = "<group>"; };
+		F171622D1A1B2DB500C749DD /* OCAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCAccountController.m; sourceTree = "<group>"; };
 		F4F3E6A1E62A9BC550D7E993 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -59,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F171622B1A1B292900C749DD /* DropboxSDK.framework in Frameworks */,
 				331A72E4AD7BF6DF21057B2C /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,6 +98,7 @@
 		F0BFC1586571790D1BE1F8B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F171622A1A1B292900C749DD /* DropboxSDK.framework */,
 				A6F6D9D7B66B43A516575DC3 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -114,14 +128,16 @@
 		F15791851A1A12410011B2BD /* OverClouded */ = {
 			isa = PBXGroup;
 			children = (
-				F15791BA1A1A283E0011B2BD /* Models */,
-				F15791BB1A1A283E0011B2BD /* Views */,
-				F15791AD1A1A1E530011B2BD /* ViewControllers */,
+				F16885BF1A1B16A50030FF33 /* OCConstants.h */,
 				F157918A1A1A12410011B2BD /* AppDelegate.h */,
 				F157918B1A1A12410011B2BD /* AppDelegate.m */,
 				F15791931A1A12410011B2BD /* Images.xcassets */,
 				F15791951A1A12410011B2BD /* LaunchScreen.xib */,
 				F15791861A1A12410011B2BD /* Supporting Files */,
+				F16885B81A1B15BC0030FF33 /* Controllers */,
+				F15791BA1A1A283E0011B2BD /* Models */,
+				F15791BB1A1A283E0011B2BD /* Views */,
+				F15791AD1A1A1E530011B2BD /* ViewControllers */,
 			);
 			path = OverClouded;
 			sourceTree = "<group>";
@@ -170,6 +186,10 @@
 		F15791BA1A1A283E0011B2BD /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F16885B91A1B15E10030FF33 /* OCAccount.h */,
+				F16885BA1A1B15E10030FF33 /* OCAccount.m */,
+				F16885BC1A1B15FD0030FF33 /* OCFile.h */,
+				F16885BD1A1B15FD0030FF33 /* OCFile.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -179,6 +199,15 @@
 			children = (
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		F16885B81A1B15BC0030FF33 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F171622C1A1B2DB500C749DD /* OCAccountController.h */,
+				F171622D1A1B2DB500C749DD /* OCAccountController.m */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -319,9 +348,12 @@
 				F15791B91A1A1F0D0011B2BD /* OCFilesViewController.m in Sources */,
 				F15791B61A1A1EDE0011B2BD /* OCAccountsViewController.m in Sources */,
 				F157918C1A1A12410011B2BD /* AppDelegate.m in Sources */,
+				F16885BB1A1B15E10030FF33 /* OCAccount.m in Sources */,
 				F15791891A1A12410011B2BD /* main.m in Sources */,
+				F16885BE1A1B15FD0030FF33 /* OCFile.m in Sources */,
 				F15791B31A1A1E950011B2BD /* OCBaseTableViewController.m in Sources */,
 				F15791B01A1A1E730011B2BD /* OCBaseViewController.m in Sources */,
+				F171622E1A1B2DB500C749DD /* OCAccountController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,6 +469,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/MMDrawerController\"",
+					"\"${PODS_ROOT}/Headers/Public/Mantle\"",
+					"\"${PODS_ROOT}/Headers/Public/OBDragDrop\"",
+					"\"${PODS_ROOT}/Headers/Public/YapDatabase\"",
+				);
 				INFOPLIST_FILE = OverClouded/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -450,6 +495,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/MMDrawerController\"",
+					"\"${PODS_ROOT}/Headers/Public/Mantle\"",
+					"\"${PODS_ROOT}/Headers/Public/OBDragDrop\"",
+					"\"${PODS_ROOT}/Headers/Public/YapDatabase\"",
+				);
 				INFOPLIST_FILE = OverClouded/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

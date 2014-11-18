@@ -7,8 +7,14 @@
 //
 
 #import "OCAccountsViewController.h"
+#import <DropboxSDK/DropboxSDK.h>
+#import "OCAccount.h"
+#import "OCAccountController.h"
 
-@interface OCAccountsViewController ()
+
+@interface OCAccountsViewController ()<DBRestClientDelegate>
+
+@property (nonatomic,strong) DBRestClient *restClient;
 
 @end
 
@@ -32,11 +38,38 @@
 }
 
 
+#pragma mark - DBRestClientDelegate
+
+- (void)restClient:(DBRestClient*)client loadedAccountInfo:(DBAccountInfo*)info
+{
+    OCAccount *account = [[OCAccount alloc] initWithAccount:info ofType:DROPBOX];
+    OCAccountController *accountController = [[OCAccountController alloc] initWithAccount:account];
+    [accountController saveWithCompletionBlock:^void(OCAccount *account) {
+        
+    }];
+}
+
+
+- (void)restClient:(DBRestClient*)client loadAccountInfoFailedWithError:(NSError*)error
+{
+    NSLog(@"errro %@",error);
+}
+
+
+#pragma mark - Dropbox Login Callback
+
+-(void)dropboxDidLink
+{
+    self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+    [self.restClient setDelegate:self];
+    [self.restClient loadAccountInfo];
+}
+
 #pragma mark - IBActions
 
 -(void)addButtonTapped:(id) sender
 {
-    
+    [[DBSession sharedSession] linkFromController:self];
 }
 
 /*

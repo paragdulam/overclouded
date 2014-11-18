@@ -66,12 +66,6 @@
 #define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Extensions 9
 #define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Extensions 2
 
-// Dropbox-iOS-SDK
-#define COCOAPODS_POD_AVAILABLE_Dropbox_iOS_SDK
-#define COCOAPODS_VERSION_MAJOR_Dropbox_iOS_SDK 1
-#define COCOAPODS_VERSION_MINOR_Dropbox_iOS_SDK 3
-#define COCOAPODS_VERSION_PATCH_Dropbox_iOS_SDK 13
-
 // MMDrawerController
 #define COCOAPODS_POD_AVAILABLE_MMDrawerController
 #define COCOAPODS_VERSION_MAJOR_MMDrawerController 0
