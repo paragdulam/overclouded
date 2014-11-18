@@ -28,7 +28,7 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonTapped:)];
     [self.navigationItem setRightBarButtonItem:addButton];
     
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:nil action:nil];
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButtonTapped:)];
     [self.navigationItem setLeftBarButtonItem:editButton];
     
     [OCAccountController getAllAccounts:^(NSArray *accounts, NSError *error) {
@@ -100,6 +100,13 @@
 -(void)addButtonTapped:(id) sender
 {
     [[DBSession sharedSession] linkFromController:self];
+}
+
+
+-(void)editButtonTapped:(id) sender
+{
+    BOOL editing = dataTableView.editing;
+    [dataTableView setEditing:!editing animated:YES];
 }
 
 /*
