@@ -21,6 +21,7 @@
 		F16885BE1A1B15FD0030FF33 /* OCFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F16885BD1A1B15FD0030FF33 /* OCFile.m */; };
 		F171622B1A1B292900C749DD /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F171622A1A1B292900C749DD /* DropboxSDK.framework */; };
 		F171622E1A1B2DB500C749DD /* OCAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = F171622D1A1B2DB500C749DD /* OCAccountController.m */; };
+		F17162311A1B33BC00C749DD /* OCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F17162301A1B33BC00C749DD /* OCUtilities.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,8 @@
 		F171622A1A1B292900C749DD /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxSDK.framework; sourceTree = "<group>"; };
 		F171622C1A1B2DB500C749DD /* OCAccountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCAccountController.h; sourceTree = "<group>"; };
 		F171622D1A1B2DB500C749DD /* OCAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCAccountController.m; sourceTree = "<group>"; };
+		F171622F1A1B33BC00C749DD /* OCUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCUtilities.h; sourceTree = "<group>"; };
+		F17162301A1B33BC00C749DD /* OCUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCUtilities.m; sourceTree = "<group>"; };
 		F4F3E6A1E62A9BC550D7E993 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +132,8 @@
 			isa = PBXGroup;
 			children = (
 				F16885BF1A1B16A50030FF33 /* OCConstants.h */,
+				F171622F1A1B33BC00C749DD /* OCUtilities.h */,
+				F17162301A1B33BC00C749DD /* OCUtilities.m */,
 				F157918A1A1A12410011B2BD /* AppDelegate.h */,
 				F157918B1A1A12410011B2BD /* AppDelegate.m */,
 				F15791931A1A12410011B2BD /* Images.xcassets */,
@@ -351,6 +356,7 @@
 				F16885BB1A1B15E10030FF33 /* OCAccount.m in Sources */,
 				F15791891A1A12410011B2BD /* main.m in Sources */,
 				F16885BE1A1B15FD0030FF33 /* OCFile.m in Sources */,
+				F17162311A1B33BC00C749DD /* OCUtilities.m in Sources */,
 				F15791B31A1A1E950011B2BD /* OCBaseTableViewController.m in Sources */,
 				F15791B01A1A1E730011B2BD /* OCBaseViewController.m in Sources */,
 				F171622E1A1B2DB500C749DD /* OCAccountController.m in Sources */,
