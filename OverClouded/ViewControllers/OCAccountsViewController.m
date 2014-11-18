@@ -44,6 +44,23 @@
 }
 
 
+
+
+#pragma mark - UITableViewDelegate
+
+
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OCAccount *account = [tableDataArray objectAtIndex:indexPath.row];
+    [account.accountController removeAccountWithCompletionBlock:^(NSError *error) {
+        
+    }];
+    [tableDataArray removeObject:account];
+    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    
+}
+
 #pragma mark - UITableViewDataSource
 
 
@@ -53,11 +70,13 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UITableViewCell"];
+        [cell.detailTextLabel setFont:[UIFont italicSystemFontOfSize:11.f]];
+        [cell.detailTextLabel setTextColor:[UIColor darkGrayColor]];
     }
     
     OCAccount *account = [tableDataArray objectAtIndex:indexPath.row];
     [cell.textLabel setText:account.displayName];
-    NSString *detailText = [NSString stringWithFormat:@"%2.2f of %2.2f Used",account.normalConsumedBytes/(1024 ^ 6),account.totalBytes/(1024 ^ 6)];
+    NSString *detailText = [NSString stringWithFormat:@"%.2f GB used out of %.2f GB",account.normalConsumedBytes * pow(10, -9),account.totalBytes * pow(10, -9)];
     [cell.detailTextLabel setText:detailText];
     
     return cell;

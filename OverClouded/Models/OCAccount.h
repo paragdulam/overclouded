@@ -10,6 +10,8 @@
 #import "OCConstants.h"
 #import <UIKit/UIKit.h>
 
+@class OCAccountController;
+
 
 @interface OCAccount : MTLModel
 {
@@ -22,6 +24,8 @@
     CGFloat totalBytes;
     NSString *userId;
     NSString *accountId;
+    
+    __unsafe_unretained OCAccountController *accountController;
 }
 
 @property(nonatomic) OCCLOUD_TYPE accountType;
@@ -33,6 +37,7 @@
 @property(nonatomic) CGFloat totalBytes;
 @property(nonatomic,strong) NSString *userId;
 @property(nonatomic,strong) NSString *accountId;
+@property(nonatomic,unsafe_unretained) OCAccountController *accountController;
 
 
 -(id) initWithAccount:(id)account ofType:(OCCLOUD_TYPE) type;

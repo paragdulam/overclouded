@@ -25,6 +25,7 @@
 {
     if (self = [super init]) {
         self.account = accnt;
+        self.account.accountController = self;
     }
     return self;
 }
@@ -54,6 +55,24 @@
     }
 }
 
+
+-(void) removeAccountWithCompletionBlock:(void(^)(NSError *error))completionHandler
+{
+    YapDatabase *database = [[YapDatabase alloc] initWithPath:[OCUtilities getAccountsDBPath]];
+    YapDatabaseConnection *connection = [database newConnection];
+    NSMutableArray *storedAccounts = [[NSMutableArray alloc] init];
+    [[self class] getAllAccounts:^(NSArray *accounts, NSError *error) {
+        [storedAccounts addObjectsFromArray:accounts];
+    }];
+    
+    [storedAccounts removeObject:self.account];
+    
+    for (OCAccount *accnt in storedAccounts) {
+        [connection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+            [transaction setObject:accnt forKey:accnt.accountId inCollection:OC_ACCOUNTS];
+        }];
+    }
+}
 
 
 -(void) storeAccountInDBWithCompletionBlock:(completionBlock)completionHandler
