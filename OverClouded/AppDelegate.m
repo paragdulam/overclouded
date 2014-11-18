@@ -61,8 +61,6 @@
     
     [DBRequest setNetworkRequestDelegate:self];
 
-
-    
     return YES;
 }
 

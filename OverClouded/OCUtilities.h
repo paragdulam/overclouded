@@ -10,9 +10,17 @@
 
 @interface OCUtilities : NSObject
 
-+(NSString *) getLibraryPath;
 +(NSString *) getUUID;
++(NSString *) getLibraryPath;
 +(NSString *) getAppCachePath;
-
++(NSString *) getAccountsPath;
++(NSString *) getAccountsDBPath;
++(BOOL) doesAccountsFolderExist;
++(void) createAccountsFolder:(void(^)(NSError *error))completionBlock;
++(void) createFolderAtPath:(NSString *)path
+         completionHandler:(void(^)(NSError *error))completionBlock;
++(void) createFileAtPath:(NSString *)path
+       completionHandler:(void(^)(NSError *error))completionBlock;
++(BOOL) doesFileExistAtPath:(NSString *) path;
 
 @end
