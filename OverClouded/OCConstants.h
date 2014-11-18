@@ -15,4 +15,6 @@ typedef enum OCCLOUD_TYPE {
 }OCCLOUD_TYPE;
 
 
+#define OC_ACCOUNTS @"Accounts"
+
 #endif

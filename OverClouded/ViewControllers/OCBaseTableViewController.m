@@ -8,16 +8,29 @@
 
 #import "OCBaseTableViewController.h"
 
-@interface OCBaseTableViewController ()
+@interface OCBaseTableViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @end
 
 @implementation OCBaseTableViewController
+@synthesize tableStyle;
+
+
+-(id) initWithTableStyle:(UITableViewStyle) style
+{
+    if (self = [super init]) {
+        self.tableStyle = style;
+        tableDataArray = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    dataTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    dataTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:self.tableStyle];
+    dataTableView.dataSource = self;
+    dataTableView.delegate = self;
     [self.view addSubview:dataTableView];
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -32,6 +45,37 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+-(void) updateTable
+{
+    [dataTableView reloadData];
+}
+
+-(void)updateTableView:(NSArray *) anArray
+{
+    [tableDataArray removeAllObjects];
+    [tableDataArray addObjectsFromArray:anArray];
+    [self updateTable];
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [tableDataArray count];
+}
+
+// Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
+// Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+    [cell.textLabel setText:@"abc"];
+    return cell;
+}
+
 
 /*
 #pragma mark - Navigation

@@ -30,6 +30,12 @@
     
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:nil action:nil];
     [self.navigationItem setLeftBarButtonItem:editButton];
+    
+    [OCAccountController getAllAccounts:^(NSArray *accounts, NSError *error) {
+        if (accounts) {
+            [self updateTableView:accounts];
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,14 +44,38 @@
 }
 
 
+#pragma mark - UITableViewDataSource
+
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UITableViewCell"];
+    }
+    
+    OCAccount *account = [tableDataArray objectAtIndex:indexPath.row];
+    [cell.textLabel setText:account.displayName];
+    NSString *detailText = [NSString stringWithFormat:@"%2.2f of %2.2f Used",account.normalConsumedBytes/(1024 ^ 6),account.totalBytes/(1024 ^ 6)];
+    [cell.detailTextLabel setText:detailText];
+    
+    return cell;
+}
+
+
+
 #pragma mark - DBRestClientDelegate
 
 - (void)restClient:(DBRestClient*)client loadedAccountInfo:(DBAccountInfo*)info
 {
     OCAccount *account = [[OCAccount alloc] initWithAccount:info ofType:DROPBOX];
     OCAccountController *accountController = [[OCAccountController alloc] initWithAccount:account];
-    [accountController saveWithCompletionBlock:^void(OCAccount *account) {
-        
+    [accountController saveWithCompletionBlock:^(OCAccount *account) {
+        if (account) {
+            [tableDataArray addObject:account];
+            [self updateTable];
+        }
     }];
 }
 

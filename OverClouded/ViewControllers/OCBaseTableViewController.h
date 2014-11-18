@@ -11,5 +11,15 @@
 @interface OCBaseTableViewController : OCBaseViewController
 {
     UITableView *dataTableView;
+    NSMutableArray *tableDataArray;
+    UITableViewStyle tableStyle;
 }
+
+-(id) initWithTableStyle:(UITableViewStyle) style;
+@property (nonatomic) UITableViewStyle tableStyle;
+
+-(void)updateTableView:(NSArray *) anArray;
+-(void) updateTable;
+
+
 @end

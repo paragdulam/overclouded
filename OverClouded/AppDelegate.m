@@ -33,11 +33,11 @@
     [self.window setBackgroundColor:[UIColor whiteColor]];
     [self.window setTintColor:[UIColor whiteColor]];
     
-    OCAccountsViewController *accountsVC = [[OCAccountsViewController alloc] init];
+    OCAccountsViewController *accountsVC = [[OCAccountsViewController alloc] initWithTableStyle:UITableViewStyleGrouped];
     self.accountsViewController = accountsVC;
     UINavigationController *accountsNavController = [[UINavigationController alloc] initWithRootViewController:self.accountsViewController];
     
-    OCFilesViewController *filesVC = [[OCFilesViewController alloc] init];
+    OCFilesViewController *filesVC = [[OCFilesViewController alloc] initWithTableStyle:UITableViewStylePlain];
     self.filesViewController = filesVC;
     UINavigationController *filesNavController = [[UINavigationController alloc] initWithRootViewController:self.filesViewController];
     

@@ -22,5 +22,6 @@ typedef void (^completionBlock)(OCAccount *account);
 
 -(id) initWithAccount:(OCAccount *) accnt;
 -(void) saveWithCompletionBlock:(completionBlock)completionBlock;
++(void) getAllAccounts:(void(^)(NSArray *accounts,NSError *error))completionHandler;
 
 @end

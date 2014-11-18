@@ -9,6 +9,14 @@
 #import "OCAccountController.h"
 #import "OCUtilities.h"
 #import "YapDatabase.h"
+#import "OCConstants.h"
+
+
+@interface OCAccountController ()
+
+-(void) storeAccountInDBWithCompletionBlock:(completionBlock)completionHandler;
+
+@end
 
 @implementation OCAccountController
 @synthesize account;
@@ -22,7 +30,7 @@
 }
 
 
--(void) saveWithCompletionBlock:(completionBlock)completionBlock
+-(void) saveWithCompletionBlock:(completionBlock)completionHandler
 {
     BOOL doesAccountsFolderExist = [OCUtilities doesAccountsFolderExist];
     if (!doesAccountsFolderExist) {
@@ -35,30 +43,62 @@
                                 completionHandler:^(NSError *error) {
                                     if (!error) {
                                         NSLog(@"Accounts Database Created");
-                                        YapDatabase *database = [[YapDatabase alloc] initWithPath:[OCUtilities getAccountsDBPath]];
-                                        
-                                        // Get a connection to the database (can have multiple for concurrency)
-                                        YapDatabaseConnection *connection = [database newConnection];
-                                        
-                                        // Add an object
-                                        [connection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-                                            [transaction setObject:self.account forKey:self.account.accountId inCollection:@"Accounts"];
-                                        }];
-                                        
-                                        // Read it back
-                                        [connection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-                                            NSLog(@"%@", [transaction objectForKey:self.account.accountId inCollection:@"Accounts"]);
-                                        }];
+                                        [self storeAccountInDBWithCompletionBlock:completionHandler];
                                     }
                                 }];
                 }
             }
         }];
     } else {
-        
+        [self storeAccountInDBWithCompletionBlock:completionHandler];
     }
-    
 }
 
+
+
+-(void) storeAccountInDBWithCompletionBlock:(completionBlock)completionHandler
+{
+    YapDatabase *database = [[YapDatabase alloc] initWithPath:[OCUtilities getAccountsDBPath]];
+    YapDatabaseConnection *connection = [database newConnection];
+    
+    NSMutableArray *accounts = [[NSMutableArray alloc] initWithCapacity:0];
+    [connection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        [transaction enumerateRowsInCollection:OC_ACCOUNTS
+                                    usingBlock:^(NSString *key, id object, id metadata, BOOL *stop) {
+                                        [accounts addObject:object];
+                                    }];
+    }];
+    
+    BOOL shouldAddAccount;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userId == %@",self.account.userId];
+    NSArray *storedAccounts = [accounts filteredArrayUsingPredicate:predicate];
+    shouldAddAccount = [storedAccounts count] ? NO : YES;
+    if (shouldAddAccount) {
+        [connection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+            [transaction setObject:self.account forKey:self.account.accountId inCollection:OC_ACCOUNTS];
+            completionHandler(self.account);
+        }];
+    } else {
+        completionHandler(nil);
+    }
+}
+
+
++(void) getAllAccounts:(void(^)(NSArray *accounts,NSError *error))completionHandler {
+    if ([OCUtilities doesFileExistAtPath:[OCUtilities getAccountsDBPath]]) {
+        YapDatabase *database = [[YapDatabase alloc] initWithPath:[OCUtilities getAccountsDBPath]];
+        YapDatabaseConnection *connection = [database newConnection];
+        [connection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+            NSMutableArray *accounts = [[NSMutableArray alloc] initWithCapacity:0];
+            [transaction enumerateRowsInCollection:OC_ACCOUNTS
+                                        usingBlock:^(NSString *key, id object, id metadata, BOOL *stop) {
+                                            [accounts addObject:object];
+                                        }];
+            completionHandler(accounts,nil);
+        }];
+    } else {
+        completionHandler(nil,nil);
+    }
+}
 
 @end
