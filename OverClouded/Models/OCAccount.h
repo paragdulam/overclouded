@@ -21,6 +21,7 @@
     CGFloat sharedConsumedBytes;
     CGFloat totalBytes;
     NSString *userId;
+    NSString *accountId;
 }
 
 @property(nonatomic) OCCLOUD_TYPE accountType;
@@ -31,6 +32,7 @@
 @property(nonatomic) CGFloat sharedConsumedBytes;
 @property(nonatomic) CGFloat totalBytes;
 @property(nonatomic,strong) NSString *userId;
+@property(nonatomic,strong) NSString *accountId;
 
 
 -(id) initWithAccount:(id)account ofType:(OCCLOUD_TYPE) type;

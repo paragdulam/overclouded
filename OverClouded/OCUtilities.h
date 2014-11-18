@@ -11,5 +11,8 @@
 @interface OCUtilities : NSObject
 
 +(NSString *) getLibraryPath;
++(NSString *) getUUID;
++(NSString *) getAppCachePath;
+
 
 @end

@@ -8,7 +8,7 @@
 
 #import "OCAccount.h"
 #import <DropboxSDK/DropboxSDK.h>
-
+#import "OCUtilities.h"
 
 @implementation OCAccount
 @synthesize accountType;
@@ -19,6 +19,7 @@
 @synthesize sharedConsumedBytes;
 @synthesize totalBytes;
 @synthesize userId;
+@synthesize accountId;
 
 
 
@@ -36,6 +37,7 @@
                 self.sharedConsumedBytes = info.quota.sharedConsumedBytes;
                 self.totalBytes = info.quota.totalBytes;
                 self.userId = info.userId;
+                self.accountId = [OCUtilities getUUID];
             }
                 break;
                 

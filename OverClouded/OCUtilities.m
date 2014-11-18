@@ -10,10 +10,20 @@
 
 @implementation OCUtilities
 
++(NSString *) getUUID
+{
+    return [[NSUUID UUID] UUIDString];
+}
+
 +(NSString *) getLibraryPath
 {
     NSString* path = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     return path;
+}
+
++(NSString *) getAppCachePath
+{
+    return [NSString stringWithFormat:@"%@/app_cache",[[self class] getLibraryPath]];
 }
 
 
