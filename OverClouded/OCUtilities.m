@@ -48,6 +48,14 @@
 
 
 
++(void) deleteFileAtPath:(NSString *)path
+       completionHandler:(void(^)(NSError *error))completionBlock {
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+    completionBlock(error);
+}
+
+
 +(void) createFileAtPath:(NSString *)path
        completionHandler:(void(^)(NSError *error))completionBlock {
     NSError *error = nil;

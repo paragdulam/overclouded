@@ -9,11 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "OCAccount.h"
 #import "YapDatabase.h"
+#import <Mantle/Mantle.h>
 
 
 typedef void (^completionBlock)(OCAccount *account);
 
-@interface OCAccountController : NSObject
+@interface OCAccountController : MTLModel
 {
     OCAccount *account;
 }

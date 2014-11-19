@@ -25,7 +25,6 @@
 {
     if (self = [super init]) {
         self.account = accnt;
-        self.account.accountController = self;
     }
     return self;
 }
@@ -66,11 +65,17 @@
     }];
     
     [storedAccounts removeObject:self.account];
-    
-    for (OCAccount *accnt in storedAccounts) {
-        [connection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-            [transaction setObject:accnt forKey:accnt.accountId inCollection:OC_ACCOUNTS];
-        }];
+    if ([storedAccounts count]) {
+        for (OCAccount *accnt in storedAccounts) {
+            [connection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+                [transaction setObject:accnt forKey:accnt.accountId inCollection:OC_ACCOUNTS];
+            }];
+        }
+    } else {
+        [OCUtilities deleteFileAtPath:[OCUtilities getAccountsPath]
+                    completionHandler:^(NSError *error) {
+                        completionHandler(error);
+                    }];
     }
 }
 

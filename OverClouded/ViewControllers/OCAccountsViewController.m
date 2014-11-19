@@ -53,7 +53,8 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OCAccount *account = [tableDataArray objectAtIndex:indexPath.row];
-    [account.accountController removeAccountWithCompletionBlock:^(NSError *error) {
+    OCAccountController *accountController = [[OCAccountController alloc] initWithAccount:account];
+    [accountController removeAccountWithCompletionBlock:^(NSError *error) {
         
     }];
     [tableDataArray removeObject:account];

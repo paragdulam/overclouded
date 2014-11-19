@@ -22,5 +22,8 @@
 +(void) createFileAtPath:(NSString *)path
        completionHandler:(void(^)(NSError *error))completionBlock;
 +(BOOL) doesFileExistAtPath:(NSString *) path;
++(void) deleteFileAtPath:(NSString *)path
+       completionHandler:(void(^)(NSError *error))completionBlock;
+
 
 @end

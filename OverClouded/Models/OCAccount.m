@@ -21,7 +21,6 @@
 @synthesize totalBytes;
 @synthesize userId;
 @synthesize accountId;
-@synthesize accountController;
 
 
 -(id) initWithAccount:(id)account ofType:(OCCLOUD_TYPE) type
