@@ -8,7 +8,7 @@
 
 #import "OCBaseTableViewController.h"
 
-@interface OCBaseTableViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface OCBaseTableViewController ()
 
 @end
 
@@ -71,8 +71,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
-    [cell.textLabel setText:@"abc"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UITableViewCell"];
+        [cell.detailTextLabel setFont:[UIFont italicSystemFontOfSize:11.f]];
+        [cell.detailTextLabel setTextColor:[UIColor darkGrayColor]];
+    }
     return cell;
 }
 

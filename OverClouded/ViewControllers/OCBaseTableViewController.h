@@ -9,7 +9,7 @@
 #import "OCBaseViewController.h"
 #import <DropboxSDK/DropboxSDK.h>
 
-@interface OCBaseTableViewController : OCBaseViewController
+@interface OCBaseTableViewController : OCBaseViewController<UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *dataTableView;
     NSMutableArray *tableDataArray;

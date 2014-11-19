@@ -77,6 +77,11 @@
                         completionHandler(error);
                     }];
     }
+    
+    NSString *filesPath = [NSString stringWithFormat:@"%@/%@",[OCUtilities getAccountsDBPath],self.account.accountId];
+    [OCUtilities deleteFileAtPath:filesPath
+                completionHandler:^(NSError *error) {
+                }];
 }
 
 

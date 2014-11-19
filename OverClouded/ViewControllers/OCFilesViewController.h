@@ -7,7 +7,15 @@
 //
 
 #import "OCBaseTableViewController.h"
+#import "OCFile.h"
 
 @interface OCFilesViewController : OCBaseTableViewController
+{
+    OCFile *currentFile;
+}
+
+@property (nonatomic,strong)OCFile *currentFile;
+
+-(id) initWithFile:(OCFile *) aFile;
 
 @end

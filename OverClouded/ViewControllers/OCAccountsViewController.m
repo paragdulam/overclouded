@@ -9,7 +9,9 @@
 #import "OCAccountsViewController.h"
 #import <DropboxSDK/DropboxSDK.h>
 #import "OCAccount.h"
+#import "OCFile.h"
 #import "OCAccountController.h"
+#import "OCFileController.h"
 
 
 @interface OCAccountsViewController ()<DBRestClientDelegate>
@@ -36,6 +38,7 @@
     [OCAccountController getAllAccounts:^(NSArray *accounts, NSError *error) {
         if (accounts) {
             [self updateTableView:accounts];
+            [[NSNotificationCenter defaultCenter] postNotificationName:OC_ALL_ACCOUNTS_READ_NOTIFICATION object:accounts];
         }
     }];
 }
@@ -63,8 +66,11 @@
     [accountController removeAccountWithCompletionBlock:^(NSError *error) {
     }];
     [[DBSession sharedSession] unlinkUserId:account.userId];
+    
     [tableDataArray removeObject:account];
     [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:OC_ACCOUNT_REMOVED_NOTIFICATION object:account];
 }
 
 #pragma mark - UITableViewDataSource
@@ -73,12 +79,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UITableViewCell"];
-        [cell.detailTextLabel setFont:[UIFont italicSystemFontOfSize:11.f]];
-        [cell.detailTextLabel setTextColor:[UIColor darkGrayColor]];
-    }
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
     OCAccount *account = [tableDataArray objectAtIndex:indexPath.row];
     [cell.textLabel setText:account.displayName];
@@ -95,7 +96,12 @@
 
 -(void) restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:OC_FILES_METADATA_LOAD_END_NOTIFICATION object:nil];
+    OCAccount *lastAccount = [tableDataArray lastObject];
+    OCFile *file = [[OCFile alloc] initWithFile:metadata ofAccountType:DROPBOX andAccountID:lastAccount.accountId];
+    OCFileController *fileController = [[OCFileController alloc] initWithFile:file];
+    [fileController saveWithCompletionBlock:^(OCFile *afile) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:OC_FILES_METADATA_LOAD_END_NOTIFICATION object:file];
+    }];
 }
 
 - (void)restClient:(DBRestClient*)client loadedAccountInfo:(DBAccountInfo*)info
@@ -107,6 +113,8 @@
         if (account) {
             [tableDataArray addObject:account];
             [self updateTable];
+            [self.restClient loadMetadata:@"/" withHash:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:OC_ACCOUNT_ADDED_NOTIFICATION object:account];
         }
     }];
 }
@@ -125,7 +133,6 @@
     self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
     [self.restClient setDelegate:self];
     [self.restClient loadAccountInfo];
-    [self.restClient loadMetadata:@"/" withHash:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:OC_FILES_METADATA_LOAD_START_NOTIFICATION object:nil];
     [self startAnimating];
 }

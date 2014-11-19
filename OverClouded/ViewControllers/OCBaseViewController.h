@@ -8,7 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class AppDelegate;
+
 @interface OCBaseViewController : UIViewController
+{
+
+}
+
+@property (nonatomic,unsafe_unretained) AppDelegate *appDelegate;
 
 -(void) startAnimating;
 -(void) stopAnimating:(UIBarButtonItem *) barbuttonItem;

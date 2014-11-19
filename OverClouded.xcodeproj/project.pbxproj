@@ -22,6 +22,7 @@
 		F16885BE1A1B15FD0030FF33 /* OCFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F16885BD1A1B15FD0030FF33 /* OCFile.m */; };
 		F171622E1A1B2DB500C749DD /* OCAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = F171622D1A1B2DB500C749DD /* OCAccountController.m */; };
 		F17162311A1B33BC00C749DD /* OCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F17162301A1B33BC00C749DD /* OCUtilities.m */; };
+		F18D37421A1CA00F00A4B373 /* OCFileController.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D37411A1CA00F00A4B373 /* OCFileController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,8 @@
 		F171622D1A1B2DB500C749DD /* OCAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCAccountController.m; sourceTree = "<group>"; };
 		F171622F1A1B33BC00C749DD /* OCUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCUtilities.h; sourceTree = "<group>"; };
 		F17162301A1B33BC00C749DD /* OCUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCUtilities.m; sourceTree = "<group>"; };
+		F18D37401A1CA00F00A4B373 /* OCFileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCFileController.h; sourceTree = "<group>"; };
+		F18D37411A1CA00F00A4B373 /* OCFileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCFileController.m; sourceTree = "<group>"; };
 		F4F3E6A1E62A9BC550D7E993 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -249,6 +252,8 @@
 			children = (
 				F171622C1A1B2DB500C749DD /* OCAccountController.h */,
 				F171622D1A1B2DB500C749DD /* OCAccountController.m */,
+				F18D37401A1CA00F00A4B373 /* OCFileController.h */,
+				F18D37411A1CA00F00A4B373 /* OCFileController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -421,6 +426,7 @@
 			files = (
 				F15791B91A1A1F0D0011B2BD /* OCFilesViewController.m in Sources */,
 				F15791B61A1A1EDE0011B2BD /* OCAccountsViewController.m in Sources */,
+				F18D37421A1CA00F00A4B373 /* OCFileController.m in Sources */,
 				F157918C1A1A12410011B2BD /* AppDelegate.m in Sources */,
 				F16885BB1A1B15E10030FF33 /* OCAccount.m in Sources */,
 				F15791891A1A12410011B2BD /* main.m in Sources */,

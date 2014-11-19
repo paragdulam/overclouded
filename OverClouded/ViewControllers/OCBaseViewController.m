@@ -7,6 +7,7 @@
 //
 
 #import "OCBaseViewController.h"
+#import "AppDelegate.h"
 
 @interface OCBaseViewController ()
 {
@@ -16,6 +17,11 @@
 @end
 
 @implementation OCBaseViewController
+
+
+-(AppDelegate *) appDelegate {
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

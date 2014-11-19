@@ -8,15 +8,31 @@
 
 #import "OCFilesViewController.h"
 #import "OCConstants.h"
+#import "OCFile.h"
+#import "OCFileController.h"
+#import "OCAccount.h"
+#import "AppDelegate.h"
 
-@interface OCFilesViewController ()
+@interface OCFilesViewController ()<DBRestClientDelegate>
 {
     UILabel *headerLabelView;
 }
 
+-(BOOL) isRootPath;
+
 @end
 
 @implementation OCFilesViewController
+@synthesize currentFile;
+
+
+-(id) initWithFile:(OCFile *) aFile
+{
+    if (self = [super init]) {
+        self.currentFile = aFile;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,11 +46,41 @@
     [headerLabelView setText:@"Swipe Right to add Accounts"];
     [dataTableView setTableHeaderView:headerLabelView];
     
+    
+    if (self.currentFile) {
+        OCFileController *fileController = [[OCFileController alloc] initWithFile:self.currentFile];
+        [fileController getFileMetadataAtPath:currentFile.path
+                                withAccountID:currentFile.accountId
+                              completionBlock:^(OCFile *afile) {
+                                  [self stopAnimating:nil];
+                                  [self updateView:afile];
+                              }];
+        self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+        [self.restClient setDelegate:self];
+        [self.restClient loadMetadata:currentFile.path withHash:currentFile.hash];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:OC_ALL_ACCOUNTS_READ_NOTIFICATION
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSArray *accounts = (NSArray *)[note object];
+                                                      for (OCAccount *account in accounts) {
+                                                          OCFileController *fileController = [[OCFileController alloc] init];
+                                                          [fileController getFileMetadataAtPath:@"/"
+                                                                                  withAccountID:account.accountId
+                                                                                completionBlock:^(OCFile *afile) {
+                                                                                    [self stopAnimating:nil];
+                                                                                    [self updateView:afile];
+                                                                                }];
+                                                      }
+                                                  }];
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:OC_FILES_METADATA_LOAD_START_NOTIFICATION
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self startAnimating];
+//                                                      [self startAnimating];
                                                   }];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:OC_FILES_METADATA_LOAD_END_NOTIFICATION
@@ -42,6 +88,37 @@
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
                                                       [self stopAnimating:nil];
+                                                      [self updateView:[note object]];
+                                                  }];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:OC_ACCOUNT_ADDED_NOTIFICATION
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self startAnimating];
+                                                      OCAccount *account = (OCAccount *)[note object];
+                                                      [headerLabelView setText:[NSString stringWithFormat:@"Loading Files for %@",account.displayName]];
+                                                      [self.appDelegate.drawerViewController setCenterViewController:self.appDelegate.filesNavController withCloseAnimation:YES completion:^(BOOL finished) {
+                                                          
+                                                      }];
+                                                  }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:OC_ACCOUNT_REMOVED_NOTIFICATION
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      OCAccount *account = (OCAccount *)[note object];
+                                                      NSPredicate *predicate = [NSPredicate predicateWithFormat:@"accountId == %@",account.accountId];
+                                                      NSArray *filteredFiles = [tableDataArray filteredArrayUsingPredicate:predicate];
+                                                      [tableDataArray removeObjectsInArray:filteredFiles];
+                                                      [self updateTable];
+                                                      if (![tableDataArray count]) {
+                                                          [self.navigationItem setTitle:@"OverClouded"];
+                                                          [headerLabelView setTextAlignment:NSTextAlignmentCenter];
+                                                          [headerLabelView setText:@"Swipe Right to add Accounts"];
+                                                          [dataTableView setTableHeaderView:headerLabelView];
+                                                      }
                                                   }];
 }
 
@@ -54,8 +131,54 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_FILES_METADATA_LOAD_START_NOTIFICATION object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_FILES_METADATA_LOAD_END_NOTIFICATION object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_ACCOUNT_ADDED_NOTIFICATION object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_ACCOUNT_REMOVED_NOTIFICATION object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_ALL_ACCOUNTS_READ_NOTIFICATION object:nil];
 }
 
+
+#pragma mark - DBRestClientDelegate
+
+- (void)restClient:(DBRestClient*)client loadedMetadata:(DBMetadata*)metadata
+{
+    OCFile *aFile = [[OCFile alloc] initWithFile:metadata ofAccountType:DROPBOX andAccountID:currentFile.accountId];
+    OCFileController *fileController = [[OCFileController alloc] initWithFile:aFile];
+    [fileController saveWithCompletionBlock:^(OCFile *afile) {
+        [self stopAnimating:nil];
+        [self updateView:aFile];
+    }];
+}
+
+- (void)restClient:(DBRestClient*)client metadataUnchangedAtPath:(NSString*)path
+{
+    
+}
+
+- (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError*)error
+{
+    
+}
+
+
+#pragma mark - Helpers
+
+-(BOOL) isRootPath
+{
+    return currentFile ? NO : YES;
+}
+
+-(void)updateView:(OCFile *) file
+{
+    NSString *title = file.filename;
+    if ([self isRootPath]) { //current folder is root
+        title = OC_ROOT_FOLDER_NAME;
+        [tableDataArray addObjectsFromArray:file.contents];
+    }
+    [self.navigationItem setTitle:title];
+    [self updateTable];
+}
 
 #pragma mark - Animating
 
@@ -71,6 +194,37 @@
     [super stopAnimating:barbuttonItem];
     [dataTableView setTableHeaderView:nil];
 }
+
+
+#pragma mark - UITableViewDelegate
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OCFile *file = [tableDataArray objectAtIndex:indexPath.row];
+    if (file.isDirectory) {
+        OCFilesViewController *filesViewController = [[OCFilesViewController alloc] initWithFile:file];
+        [self.navigationController pushViewController:filesViewController animated:YES];
+    }
+}
+
+
+
+#pragma mark - UITableViewDataSource
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    
+    OCFile *file = [tableDataArray objectAtIndex:indexPath.row];
+    [cell.textLabel setText:file.filename];
+    [cell.detailTextLabel setText:file.humanReadableSize];
+    
+    return cell;
+}
+
+
 
 /*
 #pragma mark - Navigation

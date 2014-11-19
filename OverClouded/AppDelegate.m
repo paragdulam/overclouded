@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "OCAccountsViewController.h"
 #import "OCFilesViewController.h"
-#import "MMDrawerController.h"
 #import <DropboxSDK/DropboxSDK.h>
 #import "OCConstants.h"
 
@@ -19,12 +18,10 @@
 }
 
 
-@property (nonatomic) OCAccountsViewController *accountsViewController;
-@property (nonatomic) OCFilesViewController *filesViewController;
-
 @end
 
 @implementation AppDelegate
+@synthesize drawerViewController;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -39,18 +36,21 @@
     
     OCAccountsViewController *accountsVC = [[OCAccountsViewController alloc] initWithTableStyle:UITableViewStyleGrouped];
     self.accountsViewController = accountsVC;
-    UINavigationController *accountsNavController = [[UINavigationController alloc] initWithRootViewController:self.accountsViewController];
+    UINavigationController *accountsNavC = [[UINavigationController alloc] initWithRootViewController:self.accountsViewController];
+    self.accountsNavController = accountsNavC;
     
     OCFilesViewController *filesVC = [[OCFilesViewController alloc] initWithTableStyle:UITableViewStylePlain];
     self.filesViewController = filesVC;
-    UINavigationController *filesNavController = [[UINavigationController alloc] initWithRootViewController:self.filesViewController];
+    UINavigationController *filesNavC = [[UINavigationController alloc] initWithRootViewController:self.filesViewController];
+    self.filesNavController = filesNavC;
     
-    MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:filesNavController
-                                                                           leftDrawerViewController:accountsNavController];
-    [drawerController setMaximumLeftDrawerWidth:280.0];
-    [drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
-    [drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
-    [self.window setRootViewController:drawerController];
+    MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:self.filesNavController
+                                                                           leftDrawerViewController:self.accountsNavController];
+    self.drawerViewController = drawerController;
+    [drawerViewController setMaximumLeftDrawerWidth:280.0];
+    [drawerViewController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [drawerViewController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+    [self.window setRootViewController:drawerViewController];
     [self.window makeKeyAndVisible];
     
     

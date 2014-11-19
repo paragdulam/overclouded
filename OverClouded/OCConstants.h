@@ -31,5 +31,11 @@ typedef enum OCMESSAGE_TYPE {
 #define OC_FILES_METADATA_LOAD_START_NOTIFICATION @"com.metadata.load.start"
 #define OC_FILES_METADATA_LOAD_END_NOTIFICATION @"com.metadata.load.end"
 
+#define OC_ACCOUNT_ADDED_NOTIFICATION @"com.account.add"
+#define OC_ACCOUNT_REMOVED_NOTIFICATION @"com.account.remove"
+#define OC_ALL_ACCOUNTS_READ_NOTIFICATION @"com.all.accounts.read"
+
+#define OC_ROOT_FOLDER_NAME @"Home"
+
 
 #endif
