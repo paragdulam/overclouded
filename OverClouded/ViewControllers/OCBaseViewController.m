@@ -9,7 +9,10 @@
 #import "OCBaseViewController.h"
 
 @interface OCBaseViewController ()
-
+{
+    UIActivityIndicatorView *activityIndicator;
+    UIBarButtonItem *activityIndicatorButtonItem;
+}
 @end
 
 @implementation OCBaseViewController
@@ -23,11 +26,30 @@
                                                                               blue:235.f/255.f
                                                                              alpha:1.f]];
     [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activityIndicator setHidesWhenStopped:YES];
+    activityIndicatorButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+#pragma mark - Activity Indicators
+
+-(void) startAnimating
+{
+    [activityIndicator startAnimating];
+    [self.navigationItem setRightBarButtonItem:activityIndicatorButtonItem];
+}
+
+-(void) stopAnimating:(UIBarButtonItem *) barbuttonItem
+{
+    [activityIndicator stopAnimating];
+    [self.navigationItem setRightBarButtonItem:barbuttonItem];
 }
 
 /*

@@ -11,9 +11,12 @@
 #import "OCFilesViewController.h"
 #import "MMDrawerController.h"
 #import <DropboxSDK/DropboxSDK.h>
+#import "OCConstants.h"
 
 
 @interface AppDelegate ()<DBSessionDelegate,DBNetworkRequestDelegate>
+{
+}
 
 
 @property (nonatomic) OCAccountsViewController *accountsViewController;
@@ -33,6 +36,7 @@
     [self.window setBackgroundColor:[UIColor whiteColor]];
     [self.window setTintColor:[UIColor whiteColor]];
     
+    
     OCAccountsViewController *accountsVC = [[OCAccountsViewController alloc] initWithTableStyle:UITableViewStyleGrouped];
     self.accountsViewController = accountsVC;
     UINavigationController *accountsNavController = [[UINavigationController alloc] initWithRootViewController:self.accountsViewController];
@@ -50,9 +54,10 @@
     [self.window makeKeyAndVisible];
     
     
+    
     NSString* appKey = @"y1hmeaarl6da494";
     NSString* appSecret = @"4mjdch4itbrvcyh";
-    NSString *root = @"full Dropbox";
+    NSString *root = @"auto";
     
     DBSession* session =
     [[DBSession alloc] initWithAppKey:appKey appSecret:appSecret root:root];
@@ -95,6 +100,11 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+
+#pragma mark - Alerts
+
 
 
 #pragma mark - DBSessionDelegate

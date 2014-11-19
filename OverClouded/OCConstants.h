@@ -15,6 +15,21 @@ typedef enum OCCLOUD_TYPE {
 }OCCLOUD_TYPE;
 
 
-#define OC_ACCOUNTS @"Accounts"
+typedef enum OCMESSAGE_TYPE {
+    NOTIFICATION,
+    SUCCESS,
+    ERROR,
+}OCMESSAGE_TYPE;
+
+
+#define OC_ACCOUNTS @"accounts"
+#define OC_ACCOUNTS_DB @"accounts.db"
+
+#define OC_FILES @"files"
+#define OC_FILES_DB @"files.db"
+
+#define OC_FILES_METADATA_LOAD_START_NOTIFICATION @"com.metadata.load.start"
+#define OC_FILES_METADATA_LOAD_END_NOTIFICATION @"com.metadata.load.end"
+
 
 #endif

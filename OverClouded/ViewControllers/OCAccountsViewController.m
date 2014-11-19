@@ -13,8 +13,10 @@
 
 
 @interface OCAccountsViewController ()<DBRestClientDelegate>
+{
+    UIBarButtonItem *addButton;
+}
 
-@property (nonatomic,strong) DBRestClient *restClient;
 
 @end
 
@@ -25,7 +27,7 @@
     // Do any additional setup after loading the view.
     [self.navigationItem setTitle:@"Accounts"];
     
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonTapped:)];
+    addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonTapped:)];
     [self.navigationItem setRightBarButtonItem:addButton];
     
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButtonTapped:)];
@@ -49,17 +51,20 @@
 #pragma mark - UITableViewDelegate
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OCAccount *account = [tableDataArray objectAtIndex:indexPath.row];
     OCAccountController *accountController = [[OCAccountController alloc] initWithAccount:account];
     [accountController removeAccountWithCompletionBlock:^(NSError *error) {
-        
     }];
+    [[DBSession sharedSession] unlinkUserId:account.userId];
     [tableDataArray removeObject:account];
     [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    
 }
 
 #pragma mark - UITableViewDataSource
@@ -87,8 +92,15 @@
 
 #pragma mark - DBRestClientDelegate
 
+
+-(void) restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:OC_FILES_METADATA_LOAD_END_NOTIFICATION object:nil];
+}
+
 - (void)restClient:(DBRestClient*)client loadedAccountInfo:(DBAccountInfo*)info
 {
+    [self stopAnimating:addButton];
     OCAccount *account = [[OCAccount alloc] initWithAccount:info ofType:DROPBOX];
     OCAccountController *accountController = [[OCAccountController alloc] initWithAccount:account];
     [accountController saveWithCompletionBlock:^(OCAccount *account) {
@@ -102,7 +114,7 @@
 
 - (void)restClient:(DBRestClient*)client loadAccountInfoFailedWithError:(NSError*)error
 {
-    NSLog(@"errro %@",error);
+    [self stopAnimating:addButton];
 }
 
 
@@ -113,6 +125,17 @@
     self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
     [self.restClient setDelegate:self];
     [self.restClient loadAccountInfo];
+    [self.restClient loadMetadata:@"/" withHash:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:OC_FILES_METADATA_LOAD_START_NOTIFICATION object:nil];
+    [self startAnimating];
+}
+
+#pragma mark - Helpers
+
+-(void) stopAnimating:(UIBarButtonItem *)barbuttonItem
+{
+    [super stopAnimating:barbuttonItem];
+    [dataTableView setEditing:NO animated:YES];
 }
 
 #pragma mark - IBActions

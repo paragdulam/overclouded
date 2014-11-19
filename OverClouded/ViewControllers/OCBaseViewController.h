@@ -10,4 +10,7 @@
 
 @interface OCBaseViewController : UIViewController
 
+-(void) startAnimating;
+-(void) stopAnimating:(UIBarButtonItem *) barbuttonItem;
+
 @end

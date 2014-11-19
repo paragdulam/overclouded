@@ -7,6 +7,7 @@
 //
 
 #import "OCUtilities.h"
+#import "OCConstants.h"
 
 @implementation OCUtilities
 
@@ -28,11 +29,11 @@
 
 +(NSString *) getAccountsPath
 {
-    return [NSString stringWithFormat:@"%@/accounts",[[self class] getAppCachePath]];
+    return [NSString stringWithFormat:@"%@/%@",[[self class] getAppCachePath],OC_ACCOUNTS];
 }
 
 +(NSString *) getAccountsDBPath {
-    return [NSString stringWithFormat:@"%@/accounts.db",[[self class] getAccountsPath]];
+    return [NSString stringWithFormat:@"%@/%@",[[self class] getAccountsPath],OC_ACCOUNTS_DB];
 }
 
 

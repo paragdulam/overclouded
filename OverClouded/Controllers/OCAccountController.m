@@ -100,6 +100,14 @@
     if (shouldAddAccount) {
         [connection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
             [transaction setObject:self.account forKey:self.account.accountId inCollection:OC_ACCOUNTS];
+            NSString *path = [NSString stringWithFormat:@"%@/%@",[OCUtilities getAccountsPath],self.account.accountId];
+            [OCUtilities createFolderAtPath:path
+                          completionHandler:^(NSError *error) {
+                              [OCUtilities createFileAtPath:[NSString stringWithFormat:@"%@/files.db",path]
+                                          completionHandler:^(NSError *error) {
+                                              
+                                          }];
+                          }];
             completionHandler(self.account);
         }];
     } else {
