@@ -192,11 +192,11 @@
         
         CGRect dragViewFrame = draggingView.frame;
         
-        dragViewFrame.size.width = 100;
+        dragViewFrame.size.width = 200;
         dragViewFrame.size.height = 30;
         dragViewFrame.origin.y = p.y - (dragViewFrame.size.height/2);
         dragViewFrame.origin.x = p.x;
-        if (p.x + dragViewFrame.size.width > self.view.frame.size.width) {
+        if (p.x + dragViewFrame.size.width + 30 > self.view.frame.size.width) {
             dragViewFrame.origin.x = p.x - dragViewFrame.size.width;
         }
         draggingView.frame = dragViewFrame;
@@ -219,7 +219,7 @@
         CGRect dragViewFrame = draggingView.frame;
         dragViewFrame.origin.y = p.y - (dragViewFrame.size.height/2);
         dragViewFrame.origin.x = p.x;
-        if (p.x + dragViewFrame.size.width > self.view.frame.size.width) {
+        if (p.x + dragViewFrame.size.width + 30 > self.view.frame.size.width) {
             dragViewFrame.origin.x = p.x - dragViewFrame.size.width;
         }
         draggingView.frame = dragViewFrame;
@@ -234,16 +234,13 @@
         CGRect firstCellRect = [tableView rectForRowAtIndexPath:firstVisibleIndexPath];
         CGRect lastCellRect = [tableView rectForRowAtIndexPath:lastVisibleIndexPath];
         
-        
-        NSLog(@"firstCellRect %@",NSStringFromCGRect(firstCellRect));
-        NSLog(@"lastCellRect %@",NSStringFromCGRect(lastCellRect));
-        NSLog(@"draggingView.frame %@",NSStringFromCGRect(draggingView.frame));
-        
+        draggingView.hidden = NO;
         if (draggingView.frame.origin.y < firstCellRect.origin.y) {
             CGRect targetRect = CGRectZero;
             targetRect.size = firstCellRect.size;
             targetRect.origin.x = firstCellRect.origin.x;
-            targetRect.origin.y = firstCellRect.origin.y - firstCellRect.size.height;
+            targetRect.origin.y = firstCellRect.origin.y - (firstCellRect.size.height * 2);
+            draggingView.hidden = YES;
             [tableView scrollRectToVisible:targetRect animated:YES];
         }
         
@@ -251,10 +248,15 @@
             CGRect targetRect = CGRectZero;
             targetRect.size = lastCellRect.size;
             targetRect.origin.x = lastCellRect.origin.x;
-            targetRect.origin.y = lastCellRect.origin.y + (lastCellRect.size.height * 2);
+            targetRect.origin.y = lastCellRect.origin.y + (lastCellRect.size.height * 3);
+            
+            draggingView.hidden = YES;
             [tableView scrollRectToVisible:targetRect animated:YES];
         }
         
+        if (tableView.contentOffset.y <= 0 || tableView.contentOffset.y >= tableView.contentSize.height - tableView.frame.size.height) {
+            draggingView.hidden = NO;
+        }
     }
 }
 
