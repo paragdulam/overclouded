@@ -13,9 +13,10 @@
 #import "OCAccount.h"
 #import "AppDelegate.h"
 
-@interface OCFilesViewController ()<DBRestClientDelegate>
+@interface OCFilesViewController ()<DBRestClientDelegate,UIGestureRecognizerDelegate>
 {
     UILabel *headerLabelView;
+    UIView *draggingView;
 }
 
 -(BOOL) isRootPath;
@@ -45,6 +46,17 @@
     [headerLabelView setTextAlignment:NSTextAlignmentCenter];
     [headerLabelView setText:@"Swipe Right to add Accounts"];
     [dataTableView setTableHeaderView:headerLabelView];
+    
+    
+    draggingView = [[UIView alloc] initWithFrame:CGRectZero];
+    [draggingView setBackgroundColor:[UIColor redColor]];
+    [dataTableView addSubview:draggingView];
+    
+    
+    UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
+    [longPressGesture setDelegate:self];
+    longPressGesture.minimumPressDuration = 1.f;
+    [dataTableView addGestureRecognizer:longPressGesture];
     
     if (self.currentFile) {
         OCFileController *fileController = [[OCFileController alloc] initWithFile:self.currentFile];
@@ -109,6 +121,11 @@
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
+                                                      [self.appDelegate.drawerViewController setCenterViewController:self.appDelegate.filesNavController withCloseAnimation:YES completion:^(BOOL finished) {
+                                                          [self.appDelegate.filesNavController popToRootViewControllerAnimated:YES];
+                                                      }];
+
+                                                      
                                                       OCAccount *account = (OCAccount *)[note object];
                                                       OCFileController *fileController = [[OCFileController alloc] init];
                                                       [fileController getFileMetadataAtPath:@"/"
@@ -116,9 +133,6 @@
                                                                             completionBlock:^(OCFile *afile) {
                                                                                 [self updateView:afile];
                                                                             }];
-                                                      [self.appDelegate.drawerViewController setCenterViewController:self.appDelegate.filesNavController withCloseAnimation:YES completion:^(BOOL finished) {
-                                                          
-                                                      }];
                                                   }];
 
     
@@ -155,6 +169,109 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_ALL_ACCOUNTS_READ_NOTIFICATION object:nil];
 }
+
+
+
+#pragma mark - UIGestureRecognizerDelegate
+
+
+-(void) longPressGesture:(UILongPressGestureRecognizer *) gestureRecognizer
+{
+    UITableView *tableView = (UITableView *)gestureRecognizer.view;
+    CGPoint startPoint = [gestureRecognizer locationInView:tableView];
+    NSIndexPath *indPath = [tableView indexPathForRowAtPoint:startPoint];
+    if (indPath == nil) {
+        NSLog(@"long press on table view but not on a row");
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        CGPoint p = [gestureRecognizer locationInView:tableView];
+        NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
+        NSLog(@"long press on table view at row %d", indexPath.row);
+        
+        tableView.scrollEnabled = NO;
+        tableView.alpha = 0.6;
+        
+        CGRect dragViewFrame = draggingView.frame;
+        
+        dragViewFrame.size.width = 100;
+        dragViewFrame.size.height = 30;
+        dragViewFrame.origin.y = p.y - (dragViewFrame.size.height/2);
+        dragViewFrame.origin.x = p.x;
+        if (p.x + dragViewFrame.size.width > self.view.frame.size.width) {
+            dragViewFrame.origin.x = p.x - dragViewFrame.size.width;
+        }
+        draggingView.frame = dragViewFrame;
+        
+        
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        CGPoint p = [gestureRecognizer locationInView:tableView];
+        NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
+        NSLog(@"Ended long press on table view at row %d", indexPath.row);
+        
+        tableView.scrollEnabled = YES;
+        tableView.alpha = 1.0;
+        draggingView.frame = CGRectZero;
+        
+        
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged){
+        CGPoint p = [gestureRecognizer locationInView:tableView];
+        NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
+        
+        CGRect dragViewFrame = draggingView.frame;
+        dragViewFrame.origin.y = p.y - (dragViewFrame.size.height/2);
+        dragViewFrame.origin.x = p.x;
+        if (p.x + dragViewFrame.size.width > self.view.frame.size.width) {
+            dragViewFrame.origin.x = p.x - dragViewFrame.size.width;
+        }
+        draggingView.frame = dragViewFrame;
+        
+        NSArray *visibleIndexPaths = [tableView indexPathsForVisibleRows];
+        NSInteger firstIndex = [[visibleIndexPaths firstObject] row] + 2;
+        NSInteger lastIndex = [[visibleIndexPaths lastObject] row] - 2;
+        
+        NSIndexPath *firstVisibleIndexPath = [NSIndexPath indexPathForRow:firstIndex inSection:0];
+        NSIndexPath *lastVisibleIndexPath = [NSIndexPath indexPathForRow:lastIndex inSection:0];
+        
+        CGRect firstCellRect = [tableView rectForRowAtIndexPath:firstVisibleIndexPath];
+        CGRect lastCellRect = [tableView rectForRowAtIndexPath:lastVisibleIndexPath];
+        
+        
+        NSLog(@"firstCellRect %@",NSStringFromCGRect(firstCellRect));
+        NSLog(@"lastCellRect %@",NSStringFromCGRect(lastCellRect));
+        NSLog(@"draggingView.frame %@",NSStringFromCGRect(draggingView.frame));
+        
+        if (draggingView.frame.origin.y < firstCellRect.origin.y) {
+            CGRect targetRect = CGRectZero;
+            targetRect.size = firstCellRect.size;
+            targetRect.origin.x = firstCellRect.origin.x;
+            targetRect.origin.y = firstCellRect.origin.y - firstCellRect.size.height;
+            [tableView scrollRectToVisible:targetRect animated:YES];
+        }
+        
+        if (draggingView.frame.origin.y > lastCellRect.origin.y) {
+            CGRect targetRect = CGRectZero;
+            targetRect.size = lastCellRect.size;
+            targetRect.origin.x = lastCellRect.origin.x;
+            targetRect.origin.y = lastCellRect.origin.y + (lastCellRect.size.height * 2);
+            [tableView scrollRectToVisible:targetRect animated:YES];
+        }
+        
+    }
+}
+
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    BOOL retVal = YES;
+    if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
+        retVal = NO;
+    }
+    return retVal;
+}
+
 
 
 #pragma mark - DBRestClientDelegate
@@ -228,21 +345,12 @@
 }
 
 
-
--(void) longPressGesture:(UILongPressGestureRecognizer *) longPressGesture
-{
-    NSLog(@"panGesture %@",longPressGesture);
-}
-
 #pragma mark - UITableViewDataSource
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    
-    UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
-    [cell addGestureRecognizer:longPressGesture];
     
     OCFile *file = [tableDataArray objectAtIndex:indexPath.row];
     [cell.textLabel setText:file.filename];
