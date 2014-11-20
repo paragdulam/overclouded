@@ -12,11 +12,12 @@
 #import "OCFileController.h"
 #import "OCAccount.h"
 #import "AppDelegate.h"
+#import "OCDragView.h"
 
 @interface OCFilesViewController ()<DBRestClientDelegate,UIGestureRecognizerDelegate>
 {
     UILabel *headerLabelView;
-    UIView *draggingView;
+    OCDragView *draggingView;
 }
 
 -(BOOL) isRootPath;
@@ -48,14 +49,13 @@
     [dataTableView setTableHeaderView:headerLabelView];
     
     
-    draggingView = [[UIView alloc] initWithFrame:CGRectZero];
-    [draggingView setBackgroundColor:[UIColor redColor]];
+    draggingView = [[OCDragView alloc] init];
     [dataTableView addSubview:draggingView];
     
     
     UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
     [longPressGesture setDelegate:self];
-    longPressGesture.minimumPressDuration = 1.f;
+    longPressGesture.minimumPressDuration = 2.f;
     [dataTableView addGestureRecognizer:longPressGesture];
     
     if (self.currentFile) {
@@ -188,18 +188,20 @@
         NSLog(@"long press on table view at row %d", indexPath.row);
         
         tableView.scrollEnabled = NO;
-        tableView.alpha = 0.6;
+        //tableView.alpha = 0.6;
         
         CGRect dragViewFrame = draggingView.frame;
         
         dragViewFrame.size.width = 200;
-        dragViewFrame.size.height = 30;
-        dragViewFrame.origin.y = p.y - (dragViewFrame.size.height/2);
-        dragViewFrame.origin.x = p.x;
-        if (p.x + dragViewFrame.size.width + 30 > self.view.frame.size.width) {
-            dragViewFrame.origin.x = p.x - dragViewFrame.size.width;
-        }
+        dragViewFrame.size.height = 25;
         draggingView.frame = dragViewFrame;
+        
+        CGPoint centerPoint = CGPointMake(tableView.center.x,
+                                          p.y - 30);
+        draggingView.center = centerPoint;
+        draggingView.alpha = 1.f;
+        
+        [draggingView setFile:[tableDataArray objectAtIndex:indexPath.row]];
         
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
@@ -217,12 +219,14 @@
         NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
         
         CGRect dragViewFrame = draggingView.frame;
-        dragViewFrame.origin.y = p.y - (dragViewFrame.size.height/2);
-        dragViewFrame.origin.x = p.x;
-        if (p.x + dragViewFrame.size.width + 30 > self.view.frame.size.width) {
-            dragViewFrame.origin.x = p.x - dragViewFrame.size.width;
-        }
+        
+        dragViewFrame.size.width = 200;
+        dragViewFrame.size.height = 25;
         draggingView.frame = dragViewFrame;
+        
+        CGPoint centerPoint = CGPointMake(tableView.center.x,
+                                          p.y - 30);
+        draggingView.center = centerPoint;
         
         NSArray *visibleIndexPaths = [tableView indexPathsForVisibleRows];
         NSInteger firstIndex = [[visibleIndexPaths firstObject] row] + 2;
@@ -241,7 +245,10 @@
             targetRect.origin.x = firstCellRect.origin.x;
             targetRect.origin.y = firstCellRect.origin.y - (firstCellRect.size.height * 2);
             draggingView.hidden = YES;
-            [tableView scrollRectToVisible:targetRect animated:YES];
+//            [tableView scrollRectToVisible:targetRect animated:YES];
+            [tableView scrollToRowAtIndexPath:[visibleIndexPaths firstObject]
+                             atScrollPosition:UITableViewScrollPositionTop
+                                     animated:YES];
         }
         
         if (draggingView.frame.origin.y > lastCellRect.origin.y) {
@@ -251,7 +258,9 @@
             targetRect.origin.y = lastCellRect.origin.y + (lastCellRect.size.height * 3);
             
             draggingView.hidden = YES;
-            [tableView scrollRectToVisible:targetRect animated:YES];
+            [tableView scrollToRowAtIndexPath:[visibleIndexPaths lastObject]
+                             atScrollPosition:UITableViewScrollPositionBottom
+                                     animated:YES];
         }
         
         if (tableView.contentOffset.y <= 0 || tableView.contentOffset.y >= tableView.contentSize.height - tableView.frame.size.height) {
@@ -290,7 +299,7 @@
 
 - (void)restClient:(DBRestClient*)client metadataUnchangedAtPath:(NSString*)path
 {
-    
+    [self stopAnimating:nil];
 }
 
 - (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError*)error
@@ -355,9 +364,25 @@
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
     OCFile *file = [tableDataArray objectAtIndex:indexPath.row];
-    [cell.textLabel setText:file.filename];
+    NSString *fileName = file.filename;
+    [cell.textLabel setText:fileName];
     [cell.detailTextLabel setText:file.humanReadableSize];
-    
+    UIImage *image = nil;
+    if ([file isDirectory]) {
+        image = [UIImage imageNamed:@"folder"];
+    } else {
+        NSArray *components = [fileName componentsSeparatedByString:@"."];
+        NSString *extension = [components lastObject];
+        if ([extension length]) {
+            image = [UIImage imageNamed:[extension lowercaseString]];
+            if (!image) {
+                image = [UIImage imageNamed:@"_blank"];
+            }
+        } else {
+            image = [UIImage imageNamed:@"_blank"];
+        }
+    }
+    [cell.imageView setImage:image];
     return cell;
 }
 

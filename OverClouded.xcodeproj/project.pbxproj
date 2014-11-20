@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		331A72E4AD7BF6DF21057B2C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6F6D9D7B66B43A516575DC3 /* libPods.a */; };
 		F11AEDA01A1B424400270DA4 /* libSDropboxSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F11AED991A1B41AA00270DA4 /* libSDropboxSDK.a */; };
+		F13D40AF1A1E085F0009B89F /* OCDragView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13D40AE1A1E085F0009B89F /* OCDragView.m */; };
 		F15791891A1A12410011B2BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791881A1A12410011B2BD /* main.m */; };
 		F157918C1A1A12410011B2BD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F157918B1A1A12410011B2BD /* AppDelegate.m */; };
 		F15791941A1A12410011B2BD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F15791931A1A12410011B2BD /* Images.xcassets */; };
@@ -67,6 +68,8 @@
 		91CE6D727592284FF91C7C5E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		A6F6D9D7B66B43A516575DC3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DropboxSDK.xcodeproj; path = DropboxSDK/DropboxSDK.xcodeproj; sourceTree = "<group>"; };
+		F13D40AD1A1E085F0009B89F /* OCDragView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCDragView.h; sourceTree = "<group>"; };
+		F13D40AE1A1E085F0009B89F /* OCDragView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCDragView.m; sourceTree = "<group>"; };
 		F15791831A1A12410011B2BD /* OverClouded.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OverClouded.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F15791871A1A12410011B2BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F15791881A1A12410011B2BD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -243,6 +246,8 @@
 		F15791BB1A1A283E0011B2BD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F13D40AD1A1E085F0009B89F /* OCDragView.h */,
+				F13D40AE1A1E085F0009B89F /* OCDragView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -430,6 +435,7 @@
 				F157918C1A1A12410011B2BD /* AppDelegate.m in Sources */,
 				F16885BB1A1B15E10030FF33 /* OCAccount.m in Sources */,
 				F15791891A1A12410011B2BD /* main.m in Sources */,
+				F13D40AF1A1E085F0009B89F /* OCDragView.m in Sources */,
 				F16885BE1A1B15FD0030FF33 /* OCFile.m in Sources */,
 				F17162311A1B33BC00C749DD /* OCUtilities.m in Sources */,
 				F15791B31A1A1E950011B2BD /* OCBaseTableViewController.m in Sources */,
