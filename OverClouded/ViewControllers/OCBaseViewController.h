@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OCConstants.h"
+
 
 @class AppDelegate;
 
@@ -19,5 +21,7 @@
 
 -(void) startAnimating;
 -(void) stopAnimating:(UIBarButtonItem *) barbuttonItem;
+-(void) showAlertWithMessage:(NSString *) message withType:(OCMESSAGE_TYPE) type;
+
 
 @end

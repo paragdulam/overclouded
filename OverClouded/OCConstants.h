@@ -34,6 +34,7 @@ typedef enum OCMESSAGE_TYPE {
 #define OC_ACCOUNT_ADDED_NOTIFICATION @"com.account.add"
 #define OC_ACCOUNT_REMOVED_NOTIFICATION @"com.account.remove"
 #define OC_ALL_ACCOUNTS_READ_NOTIFICATION @"com.all.accounts.read"
+#define OC_ACCOUNT_SELECTED_NOTIFICATION @"com.accounts.selected"
 
 #define OC_ROOT_FOLDER_NAME @"Home"
 

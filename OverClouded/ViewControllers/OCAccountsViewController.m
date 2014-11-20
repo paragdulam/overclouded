@@ -12,6 +12,7 @@
 #import "OCFile.h"
 #import "OCAccountController.h"
 #import "OCFileController.h"
+#import "AppDelegate.h"
 
 
 @interface OCAccountsViewController ()<DBRestClientDelegate>
@@ -56,7 +57,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:OC_ACCOUNT_SELECTED_NOTIFICATION object:[tableDataArray objectAtIndex:indexPath.row]];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath

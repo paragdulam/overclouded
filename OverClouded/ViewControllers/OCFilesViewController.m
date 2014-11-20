@@ -28,7 +28,7 @@
 
 -(id) initWithFile:(OCFile *) aFile
 {
-    if (self = [super init]) {
+    if (self = [super initWithTableStyle:UITableViewStylePlain]) {
         self.currentFile = aFile;
     }
     return self;
@@ -46,7 +46,6 @@
     [headerLabelView setText:@"Swipe Right to add Accounts"];
     [dataTableView setTableHeaderView:headerLabelView];
     
-    
     if (self.currentFile) {
         OCFileController *fileController = [[OCFileController alloc] initWithFile:self.currentFile];
         [fileController getFileMetadataAtPath:currentFile.path
@@ -58,6 +57,7 @@
         self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
         [self.restClient setDelegate:self];
         [self.restClient loadMetadata:currentFile.path withHash:currentFile.hash];
+        [self startAnimating];
     }
     
     [[NSNotificationCenter defaultCenter] addObserverForName:OC_ALL_ACCOUNTS_READ_NOTIFICATION
@@ -103,6 +103,24 @@
                                                           
                                                       }];
                                                   }];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:OC_ACCOUNT_SELECTED_NOTIFICATION
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      OCAccount *account = (OCAccount *)[note object];
+                                                      OCFileController *fileController = [[OCFileController alloc] init];
+                                                      [fileController getFileMetadataAtPath:@"/"
+                                                                              withAccountID:account.accountId
+                                                                            completionBlock:^(OCFile *afile) {
+                                                                                [self updateView:afile];
+                                                                            }];
+                                                      [self.appDelegate.drawerViewController setCenterViewController:self.appDelegate.filesNavController withCloseAnimation:YES completion:^(BOOL finished) {
+                                                          
+                                                      }];
+                                                  }];
+
     
     [[NSNotificationCenter defaultCenter] addObserverForName:OC_ACCOUNT_REMOVED_NOTIFICATION
                                                       object:nil
@@ -158,11 +176,13 @@
 
 - (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError*)error
 {
-    
+    [self stopAnimating:nil];
 }
 
 
 #pragma mark - Helpers
+
+
 
 -(BOOL) isRootPath
 {
@@ -174,10 +194,9 @@
     NSString *title = file.filename;
     if ([self isRootPath]) { //current folder is root
         title = OC_ROOT_FOLDER_NAME;
-        [tableDataArray addObjectsFromArray:file.contents];
     }
     [self.navigationItem setTitle:title];
-    [self updateTable];
+    [self updateTableView:file.contents];
 }
 
 #pragma mark - Animating

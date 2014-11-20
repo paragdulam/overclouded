@@ -9,6 +9,8 @@
 #import "OCBaseTableViewController.h"
 
 @interface OCBaseTableViewController ()
+{
+}
 
 @end
 
@@ -47,6 +49,9 @@
 }
 
 
+#pragma mark - Helpers
+
+
 -(void) updateTable
 {
     [dataTableView reloadData];
@@ -58,6 +63,7 @@
     [tableDataArray addObjectsFromArray:anArray];
     [self updateTable];
 }
+
 
 #pragma mark - UITableViewDataSource
 
