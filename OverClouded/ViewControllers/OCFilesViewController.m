@@ -229,12 +229,20 @@
 
 
 
+-(void) longPressGesture:(UILongPressGestureRecognizer *) longPressGesture
+{
+    NSLog(@"panGesture %@",longPressGesture);
+}
+
 #pragma mark - UITableViewDataSource
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    
+    UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
+    [cell addGestureRecognizer:longPressGesture];
     
     OCFile *file = [tableDataArray objectAtIndex:indexPath.row];
     [cell.textLabel setText:file.filename];
