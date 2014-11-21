@@ -30,7 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    dataTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:self.tableStyle];
+    dataTableView = [[OCTableView alloc] initWithFrame:self.view.bounds style:self.tableStyle];
     dataTableView.dataSource = self;
     dataTableView.delegate = self;
     [self.view addSubview:dataTableView];

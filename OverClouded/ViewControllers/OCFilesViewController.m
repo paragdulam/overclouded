@@ -14,10 +14,9 @@
 #import "AppDelegate.h"
 #import "OCDragView.h"
 
-@interface OCFilesViewController ()<DBRestClientDelegate,UIGestureRecognizerDelegate>
+@interface OCFilesViewController ()<DBRestClientDelegate,OCTableViewDelegate>
 {
     UILabel *headerLabelView;
-    OCDragView *draggingView;
 }
 
 -(BOOL) isRootPath;
@@ -47,16 +46,7 @@
     [headerLabelView setTextAlignment:NSTextAlignmentCenter];
     [headerLabelView setText:@"Swipe Right to add Accounts"];
     [dataTableView setTableHeaderView:headerLabelView];
-    
-    
-    draggingView = [[OCDragView alloc] init];
-    [dataTableView addSubview:draggingView];
-    
-    
-    UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
-    [longPressGesture setDelegate:self];
-    longPressGesture.minimumPressDuration = 2.f;
-    [dataTableView addGestureRecognizer:longPressGesture];
+    [dataTableView setDragTableViewDelegate:self];
     
     if (self.currentFile) {
         OCFileController *fileController = [[OCFileController alloc] initWithFile:self.currentFile];
@@ -172,118 +162,24 @@
 
 
 
-#pragma mark - UIGestureRecognizerDelegate
+#pragma mark - OCTableViewDelegate
 
-
--(void) longPressGesture:(UILongPressGestureRecognizer *) gestureRecognizer
+-(NSArray *) dataForTableView:(OCTableView *) tableView
 {
-    UITableView *tableView = (UITableView *)gestureRecognizer.view;
-    CGPoint startPoint = [gestureRecognizer locationInView:tableView];
-    NSIndexPath *indPath = [tableView indexPathForRowAtPoint:startPoint];
-    if (indPath == nil) {
-        NSLog(@"long press on table view but not on a row");
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        CGPoint p = [gestureRecognizer locationInView:tableView];
-        NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
-        NSLog(@"long press on table view at row %d", indexPath.row);
-        
-        tableView.scrollEnabled = NO;
-        //tableView.alpha = 0.6;
-        
-        CGRect dragViewFrame = draggingView.frame;
-        
-        dragViewFrame.size.width = 200;
-        dragViewFrame.size.height = 25;
-        draggingView.frame = dragViewFrame;
-        
-        CGPoint centerPoint = CGPointMake(tableView.center.x,
-                                          p.y - 30);
-        draggingView.center = centerPoint;
-        draggingView.alpha = 1.f;
-        
-        [draggingView setFile:[tableDataArray objectAtIndex:indexPath.row]];
-        
-        
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        CGPoint p = [gestureRecognizer locationInView:tableView];
-        NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
-        NSLog(@"Ended long press on table view at row %d", indexPath.row);
-        
-        tableView.scrollEnabled = YES;
-        tableView.alpha = 1.0;
-        draggingView.frame = CGRectZero;
-        
-        
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged){
-        CGPoint p = [gestureRecognizer locationInView:tableView];
-        NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
-        
-        CGRect dragViewFrame = draggingView.frame;
-        
-        dragViewFrame.size.width = 200;
-        dragViewFrame.size.height = 25;
-        draggingView.frame = dragViewFrame;
-        
-        CGPoint centerPoint = CGPointMake(tableView.center.x,
-                                          p.y - 30);
-        draggingView.center = centerPoint;
-        
-        NSArray *visibleIndexPaths = [tableView indexPathsForVisibleRows];
-        NSInteger firstIndex = [[visibleIndexPaths firstObject] row] + 2;
-        NSInteger lastIndex = [[visibleIndexPaths lastObject] row] - 2;
-        
-        NSIndexPath *firstVisibleIndexPath = [NSIndexPath indexPathForRow:firstIndex inSection:0];
-        NSIndexPath *lastVisibleIndexPath = [NSIndexPath indexPathForRow:lastIndex inSection:0];
-        
-        CGRect firstCellRect = [tableView rectForRowAtIndexPath:firstVisibleIndexPath];
-        CGRect lastCellRect = [tableView rectForRowAtIndexPath:lastVisibleIndexPath];
-        
-        draggingView.hidden = NO;
-        if (draggingView.frame.origin.y < firstCellRect.origin.y) {
-            CGRect targetRect = CGRectZero;
-            targetRect.size = firstCellRect.size;
-            targetRect.origin.x = firstCellRect.origin.x;
-            targetRect.origin.y = firstCellRect.origin.y - (firstCellRect.size.height * 2);
-            draggingView.hidden = YES;
-//            [tableView scrollRectToVisible:targetRect animated:YES];
-            [tableView scrollToRowAtIndexPath:[visibleIndexPaths firstObject]
-                             atScrollPosition:UITableViewScrollPositionTop
-                                     animated:YES];
-        }
-        
-        if (draggingView.frame.origin.y > lastCellRect.origin.y) {
-            CGRect targetRect = CGRectZero;
-            targetRect.size = lastCellRect.size;
-            targetRect.origin.x = lastCellRect.origin.x;
-            targetRect.origin.y = lastCellRect.origin.y + (lastCellRect.size.height * 3);
-            
-            draggingView.hidden = YES;
-            [tableView scrollToRowAtIndexPath:[visibleIndexPaths lastObject]
-                             atScrollPosition:UITableViewScrollPositionBottom
-                                     animated:YES];
-        }
-        
-        if (tableView.contentOffset.y <= 0 || tableView.contentOffset.y >= tableView.contentSize.height - tableView.frame.size.height) {
-            draggingView.hidden = NO;
-        }
-    }
+    return tableDataArray;
 }
 
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+-(UIView *) dragViewForTableView:(OCTableView *) tableView
 {
-    return YES;
+    return [[OCDragView alloc] init];
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    BOOL retVal = YES;
-    if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
-        retVal = NO;
-    }
-    return retVal;
+-(void) tableView:(OCTableView *)tableView didSelectFile:(id)file withDraggingView:(UIView *)aView
+{
+    OCDragView *draggingView = (OCDragView *)aView;
+    [draggingView setFile:file];
 }
-
-
 
 #pragma mark - DBRestClientDelegate
 
