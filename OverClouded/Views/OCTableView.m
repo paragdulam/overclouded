@@ -65,8 +65,9 @@
         NSLog(@"long press on table view at row %d", indexPath.row);
         
         tableView.scrollEnabled = NO;
-        //tableView.alpha = 0.6;
+        
         draggingView = [self.dragTableViewDelegate dragViewForTableView:self];
+        [self addSubview:draggingView];
         CGRect dragViewFrame = draggingView.frame;
         
         dragViewFrame.size.width = 200;
@@ -97,23 +98,19 @@
         tableView.scrollEnabled = YES;
         tableView.alpha = 1.0;
         
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:.3f];
-        
-        draggingView.frame = CGRectMake(draggingView.frame.origin.x,
-                                        draggingView.frame.origin.y,
-                                        0,
-                                        0);
-        draggingView.center = CGPointMake(tableView.center.x,
-                                          p.y);
-        
-        [UIView commitAnimations];
+        [UIView animateWithDuration:.3f animations:^{
+            draggingView.frame = CGRectMake(draggingView.frame.origin.x,
+                                            draggingView.frame.origin.y,
+                                            0,
+                                            0);
+            draggingView.center = CGPointMake(tableView.center.x,
+                                              p.y);
+        } completion:^(BOOL finished) {
+            [draggingView removeFromSuperview];
+        }];
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged){
         CGPoint p = [gestureRecognizer locationInView:tableView];
-        NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        [cell setBackgroundColor:[UIColor redColor]];
         
         NSArray *visibleIndexPaths = [tableView indexPathsForVisibleRows];
         NSInteger firstIndex = [[visibleIndexPaths firstObject] row] + 2;
