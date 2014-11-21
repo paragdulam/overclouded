@@ -8,10 +8,15 @@
 
 #import "OCTableView.h"
 #import "OCDragView.h"
+#import "AppDelegate.h"
+
+
+#define IS_DRAGGING_UP @"isDraggingUp"
 
 @interface OCTableView()<UIGestureRecognizerDelegate>
 {
     UIView *draggingView;
+    UILongPressGestureRecognizer *longPressGesture;
 }
 -(void) enableFileMoveGestureRecognizer;
 
@@ -41,12 +46,28 @@
 
 -(void) enableFileMoveGestureRecognizer
 {
-    UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
+    longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
     [longPressGesture setDelegate:self];
-    longPressGesture.minimumPressDuration = 2.f;
+    longPressGesture.cancelsTouchesInView = YES;
+    longPressGesture.minimumPressDuration = 1.f;
     [self addGestureRecognizer:longPressGesture];
 }
 
+
+
+#pragma mark - Helpers
+
+-(void) timerFired:(NSTimer *) aTimer
+{
+    NSDictionary *userInfo = [aTimer userInfo];
+    BOOL isDraggingUp = [[userInfo objectForKey:IS_DRAGGING_UP] boolValue];
+    OCTableView *tableView = self;
+    CGFloat contentOffsetY = isDraggingUp ? tableView.contentOffset.y + tableView.rowHeight : tableView.contentOffset.y - tableView.rowHeight;
+    [UIView animateWithDuration:.3f
+                     animations:^{
+                         [tableView setContentOffset:CGPointMake(tableView.contentOffset.x, contentOffsetY)];
+                     } completion:NULL];
+}
 
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -58,11 +79,9 @@
     CGPoint startPoint = [gestureRecognizer locationInView:tableView];
     NSIndexPath *indPath = [tableView indexPathForRowAtPoint:startPoint];
     if (indPath == nil) {
-        NSLog(@"long press on table view but not on a row");
     } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         CGPoint p = [gestureRecognizer locationInView:tableView];
         NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
-        NSLog(@"long press on table view at row %d", indexPath.row);
         
         tableView.scrollEnabled = NO;
         
@@ -70,9 +89,10 @@
         [self addSubview:draggingView];
         CGRect dragViewFrame = draggingView.frame;
         
-        dragViewFrame.size.width = 200;
-        dragViewFrame.size.height = 25;
+        dragViewFrame.size.width = 60;
+        dragViewFrame.size.height = 60;
         draggingView.center = p;
+        
         CGPoint centerPoint = CGPointMake(tableView.center.x,
                                           p.y - 30);
         
@@ -91,9 +111,9 @@
         [self.dragTableViewDelegate tableView:selectedObj didSelectFile:selectedObj withDraggingView:draggingView];
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        
         CGPoint p = [gestureRecognizer locationInView:tableView];
         NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
-        NSLog(@"Ended long press on table view at row %d", indexPath.row);
         
         tableView.scrollEnabled = YES;
         tableView.alpha = 1.0;
@@ -110,48 +130,38 @@
         }];
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged){
+        
         CGPoint p = [gestureRecognizer locationInView:tableView];
-        
-        NSArray *visibleIndexPaths = [tableView indexPathsForVisibleRows];
-        NSInteger firstIndex = [[visibleIndexPaths firstObject] row] + 2;
-        NSInteger lastIndex = [[visibleIndexPaths lastObject] row] - 2;
-        
-        NSIndexPath *firstVisibleIndexPath = [NSIndexPath indexPathForRow:firstIndex inSection:0];
-        NSIndexPath *lastVisibleIndexPath = [NSIndexPath indexPathForRow:lastIndex inSection:0];
-        
-        CGRect firstCellRect = [tableView rectForRowAtIndexPath:firstVisibleIndexPath];
-        CGRect lastCellRect = [tableView rectForRowAtIndexPath:lastVisibleIndexPath];
-        
-        draggingView.hidden = NO;
-        if (draggingView.frame.origin.y < firstCellRect.origin.y) {
-            CGRect targetRect = CGRectZero;
-            targetRect.size = firstCellRect.size;
-            targetRect.origin.x = firstCellRect.origin.x;
-            targetRect.origin.y = firstCellRect.origin.y - (firstCellRect.size.height * 2);
-            draggingView.hidden = YES;
-            //            [tableView scrollRectToVisible:targetRect animated:YES];
-            [tableView scrollToRowAtIndexPath:[visibleIndexPaths firstObject]
-                             atScrollPosition:UITableViewScrollPositionTop
-                                     animated:YES];
-        }
-        
-        if (draggingView.frame.origin.y > lastCellRect.origin.y) {
-            CGRect targetRect = CGRectZero;
-            targetRect.size = lastCellRect.size;
-            targetRect.origin.x = lastCellRect.origin.x;
-            targetRect.origin.y = lastCellRect.origin.y + (lastCellRect.size.height * 3);
-            
-            draggingView.hidden = YES;
-            [tableView scrollToRowAtIndexPath:[visibleIndexPaths lastObject]
-                             atScrollPosition:UITableViewScrollPositionBottom
-                                     animated:YES];
-        }
-        
-        if (tableView.contentOffset.y <= 0 || tableView.contentOffset.y >= tableView.contentSize.height - tableView.frame.size.height) {
-            draggingView.hidden = NO;
-        }
+        CGFloat distanceFromBottom = [tableView contentSize].height - [tableView contentOffset].y;
+
+        NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
         CGPoint centerPoint = CGPointMake(tableView.center.x,p.y - 30);
         draggingView.center = centerPoint;
+        
+        CGRect boundingRect = CGRectMake(tableView.contentOffset.x,
+                                         tableView.contentOffset.y + 60,
+                                         tableView.bounds.size.width,
+                                         tableView.bounds.size.height - 120);
+        draggingView.hidden = NO;
+        BOOL isDraggingUp = NO;
+        if (draggingView.frame.origin.y <= boundingRect.origin.y) {
+            draggingView.hidden = YES;
+            isDraggingUp = YES;
+        }
+        
+        if (CGRectGetMaxY(draggingView.frame) >= CGRectGetMaxY(boundingRect)) {
+            draggingView.hidden = YES;
+        }
+
+        if (draggingView.hidden) {
+            CGFloat offset = (2 * tableView.rowHeight);
+            CGFloat contentOffsetY = isDraggingUp ? tableView.contentOffset.y - offset : tableView.contentOffset.y + offset;
+            contentOffsetY = contentOffsetY <= -64.f ? -64.f : contentOffsetY;
+            contentOffsetY = contentOffsetY >= distanceFromBottom ? distanceFromBottom : contentOffsetY;
+            NSLog(@"distanceFromBottom %f",distanceFromBottom);
+            NSLog(@"tableView.contentOffset.y %f",tableView.contentOffset.y);
+            [tableView setContentOffset:CGPointMake(tableView.contentOffset.x, contentOffsetY) animated:YES];
+        }
     }
 }
 

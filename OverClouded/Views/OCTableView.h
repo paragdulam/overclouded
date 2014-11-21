@@ -15,6 +15,7 @@
 }
 
 @property (nonatomic,weak) id<OCTableViewDelegate> dragTableViewDelegate;
+-(void) setDragTableViewDelegate:(id<OCTableViewDelegate>)aDelegate;
 
 
 @end

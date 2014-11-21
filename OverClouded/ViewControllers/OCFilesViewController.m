@@ -46,6 +46,7 @@
     [headerLabelView setTextAlignment:NSTextAlignmentCenter];
     [headerLabelView setText:@"Swipe Right to add Accounts"];
     [dataTableView setTableHeaderView:headerLabelView];
+    [dataTableView setRowHeight:44.f];
     [dataTableView setDragTableViewDelegate:self];
     
     if (self.currentFile) {

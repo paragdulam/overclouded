@@ -7,6 +7,8 @@
 //
 
 #import "OCDragView.h"
+#define LABEL_HEIGHT 20.f
+#define OFFSET 3.f
 
 @interface OCDragView ()
 {
@@ -29,7 +31,8 @@
                                                            blue:184.f/255.f
                                                           alpha:1.f]];
         [fileNameLabel setTextColor:[UIColor whiteColor]];
-        [fileNameLabel setTextAlignment:NSTextAlignmentLeft];
+        [fileNameLabel setFont:[UIFont boldSystemFontOfSize:14.f]];
+        [fileNameLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:fileNameLabel];
     }
     return self;
@@ -38,15 +41,24 @@
 -(void) setFrame:(CGRect)frame
 {
     [super setFrame:frame];
-    fileImageView.frame = CGRectMake(0,
-                                     0,
-                                     self.bounds.size.height,
-                                     self.bounds.size.height);
+    CGFloat imageViewHeight = self.bounds.size.height - LABEL_HEIGHT;
+    if (imageViewHeight <= 0) {
+        imageViewHeight = 0;
+    }
     
-    fileNameLabel.frame = CGRectMake(CGRectGetMaxX(fileImageView.frame),
-                                     fileImageView.frame.origin.y,
-                                     self.bounds.size.width - fileImageView.frame.size.width,
-                                     self.bounds.size.height);
+    fileNameLabel.frame = CGRectMake(self.bounds.origin.x,
+                                     imageViewHeight,
+                                     self.bounds.size.width,
+                                     LABEL_HEIGHT);
+
+    fileImageView.frame = CGRectMake(0,
+                                     OFFSET,
+                                     imageViewHeight,
+                                     imageViewHeight - (2 * OFFSET));
+    fileImageView.center = CGPointMake(self.center.x, fileImageView.center.y);
+    
+    fileImageView.layer.cornerRadius = 2.f;
+    fileImageView.clipsToBounds = YES;
     
     fileNameLabel.layer.cornerRadius = fileNameLabel.frame.size.height/2;
     fileNameLabel.clipsToBounds = YES;
