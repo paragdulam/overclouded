@@ -23,6 +23,7 @@
 -(id) init {
     if (self = [super init]) {
         fileImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [fileImageView setContentMode:UIViewContentModeScaleAspectFit];
         [self addSubview:fileImageView];
         
         fileNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];

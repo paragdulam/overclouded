@@ -182,6 +182,12 @@
     [draggingView setFile:file];
 }
 
+-(void) tableView:(OCTableView *)tableView isDraggingNowOnIndexPath:(NSIndexPath *) dragIndexPath withStartingIndexPath:(NSIndexPath *)startIndexPath
+{
+    [tableView reloadRowsAtIndexPaths:@[dragIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+
 #pragma mark - DBRestClientDelegate
 
 - (void)restClient:(DBRestClient*)client loadedMetadata:(DBMetadata*)metadata

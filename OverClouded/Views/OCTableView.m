@@ -17,12 +17,23 @@
 {
     UIView *draggingView;
     UILongPressGestureRecognizer *longPressGesture;
+    
+    NSIndexPath *fromIndexPath;
+    NSIndexPath *draggedIndexPath;
+    NSIndexPath *toIndexPath;
 }
 -(void) enableFileMoveGestureRecognizer;
+
+@property(nonatomic,strong) NSIndexPath *fromIndexPath;
+@property(nonatomic,strong) NSIndexPath *draggedIndexPath;
+@property(nonatomic,strong) NSIndexPath *toIndexPath;
 
 @end
 
 @implementation OCTableView
+@synthesize fromIndexPath;
+@synthesize draggedIndexPath;
+@synthesize toIndexPath;
 
 -(void) setDragTableViewDelegate:(id<OCTableViewDelegate>)aDelegate
 {
@@ -48,7 +59,7 @@
 {
     longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
     [longPressGesture setDelegate:self];
-    longPressGesture.cancelsTouchesInView = YES;
+    longPressGesture.delaysTouchesBegan = YES;
     longPressGesture.minimumPressDuration = 1.f;
     [self addGestureRecognizer:longPressGesture];
 }
@@ -82,7 +93,7 @@
     } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         CGPoint p = [gestureRecognizer locationInView:tableView];
         NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
-        
+        self.fromIndexPath = indexPath;
         tableView.scrollEnabled = NO;
         
         draggingView = [self.dragTableViewDelegate dragViewForTableView:self];
@@ -114,6 +125,7 @@
         
         CGPoint p = [gestureRecognizer locationInView:tableView];
         NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
+        self.toIndexPath = indexPath;
         
         tableView.scrollEnabled = YES;
         tableView.alpha = 1.0;
@@ -135,6 +147,17 @@
         CGFloat distanceFromBottom = [tableView contentSize].height - [tableView contentOffset].y;
 
         NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
+        if (!draggedIndexPath) {
+            self.draggedIndexPath = indexPath;
+        } else {
+            if (draggedIndexPath.section == indexPath.section &&
+                draggedIndexPath.row != indexPath.row) {
+                self.draggedIndexPath = indexPath;
+            }
+        }
+        [self.dragTableViewDelegate tableView:self
+                     isDraggingNowOnIndexPath:draggedIndexPath
+                        withStartingIndexPath:fromIndexPath];
         CGPoint centerPoint = CGPointMake(tableView.center.x,p.y - 30);
         draggingView.center = centerPoint;
         
@@ -157,9 +180,6 @@
             CGFloat offset = (2 * tableView.rowHeight);
             CGFloat contentOffsetY = isDraggingUp ? tableView.contentOffset.y - offset : tableView.contentOffset.y + offset;
             contentOffsetY = contentOffsetY <= -64.f ? -64.f : contentOffsetY;
-            contentOffsetY = contentOffsetY >= distanceFromBottom ? distanceFromBottom : contentOffsetY;
-            NSLog(@"distanceFromBottom %f",distanceFromBottom);
-            NSLog(@"tableView.contentOffset.y %f",tableView.contentOffset.y);
             [tableView setContentOffset:CGPointMake(tableView.contentOffset.x, contentOffsetY) animated:YES];
         }
     }
