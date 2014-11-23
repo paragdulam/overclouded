@@ -119,7 +119,7 @@
         //return back with a delegate
         
         id selectedObj = [[self.dragTableViewDelegate dataForTableView:self] objectAtIndex:indexPath.row];
-        [self.dragTableViewDelegate tableView:selectedObj didSelectFile:selectedObj withDraggingView:draggingView];
+        [self.dragTableViewDelegate tableView:selectedObj didSelectFile:selectedObj AtIndexPath:fromIndexPath withDraggingView:draggingView];
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         
@@ -147,17 +147,23 @@
         CGFloat distanceFromBottom = [tableView contentSize].height - [tableView contentOffset].y;
 
         NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
-        if (!draggedIndexPath) {
-            self.draggedIndexPath = indexPath;
-        } else {
-            if (draggedIndexPath.section == indexPath.section &&
-                draggedIndexPath.row != indexPath.row) {
+        if (indexPath.section == fromIndexPath.section &&
+            indexPath.row != fromIndexPath.row) {
+            if (!draggedIndexPath) {
                 self.draggedIndexPath = indexPath;
+                [self.dragTableViewDelegate tableView:self
+                             isDraggingNowOnIndexPath:draggedIndexPath
+                                withStartingIndexPath:fromIndexPath];
+            } else {
+                if (draggedIndexPath.section == indexPath.section &&
+                    draggedIndexPath.row != indexPath.row) {
+                    self.draggedIndexPath = indexPath;
+                    [self.dragTableViewDelegate tableView:self
+                                 isDraggingNowOnIndexPath:draggedIndexPath
+                                    withStartingIndexPath:fromIndexPath];
+                }
             }
         }
-        [self.dragTableViewDelegate tableView:self
-                     isDraggingNowOnIndexPath:draggedIndexPath
-                        withStartingIndexPath:fromIndexPath];
         CGPoint centerPoint = CGPointMake(tableView.center.x,p.y - 30);
         draggingView.center = centerPoint;
         

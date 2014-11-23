@@ -176,7 +176,7 @@
     return [[OCDragView alloc] init];
 }
 
--(void) tableView:(OCTableView *)tableView didSelectFile:(id)file withDraggingView:(UIView *)aView
+-(void) tableView:(OCTableView *)tableView didSelectFile:(id)file AtIndexPath:(NSIndexPath *)indexPath withDraggingView:(UIView *)aView
 {
     OCDragView *draggingView = (OCDragView *)aView;
     [draggingView setFile:file];
@@ -184,7 +184,7 @@
 
 -(void) tableView:(OCTableView *)tableView isDraggingNowOnIndexPath:(NSIndexPath *) dragIndexPath withStartingIndexPath:(NSIndexPath *)startIndexPath
 {
-    [tableView reloadRowsAtIndexPaths:@[dragIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [tableView reloadRowsAtIndexPaths:@[dragIndexPath] withRowAnimation:UITableViewRowAnimationRight];
 }
 
 

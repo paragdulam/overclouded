@@ -28,8 +28,6 @@
 -(UIView *) dragViewForTableView:(OCTableView *) tableView;
 
 @optional
--(void) tableView:(OCTableView *) tableView didSelectFile:(id) file withDraggingView:(UIView *) aView;
+-(void) tableView:(OCTableView *) tableView didSelectFile:(id) file AtIndexPath:(NSIndexPath *) indexPath withDraggingView:(UIView *) aView;
 -(void) tableView:(OCTableView *)tableView isDraggingNowOnIndexPath:(NSIndexPath *) dragIndexPath withStartingIndexPath:(NSIndexPath *)startIndexPath;
-
-
 @end
