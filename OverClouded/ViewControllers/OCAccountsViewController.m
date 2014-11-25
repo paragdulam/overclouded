@@ -13,6 +13,7 @@
 #import "OCAccountController.h"
 #import "OCFileController.h"
 #import "AppDelegate.h"
+#import "OCUtilities.h"
 
 
 @interface OCAccountsViewController ()<DBRestClientDelegate>
@@ -98,7 +99,7 @@
 -(void) restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata
 {
     OCAccount *lastAccount = [tableDataArray lastObject];
-    OCFile *file = [[OCFile alloc] initWithFile:metadata ofAccountType:DROPBOX andAccountID:lastAccount.accountId];
+    OCFile *file = [[OCFile alloc] initWithFile:metadata WithFileID:[OCUtilities getUUID] ofAccountType:DROPBOX inAccountID:lastAccount.accountId ];
     OCFileController *fileController = [[OCFileController alloc] initWithFile:file];
     [fileController saveWithCompletionBlock:^(OCFile *afile) {
         [[NSNotificationCenter defaultCenter] postNotificationName:OC_FILES_METADATA_LOAD_END_NOTIFICATION object:file];

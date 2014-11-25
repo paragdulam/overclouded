@@ -8,6 +8,7 @@
 
 #import "OCFile.h"
 #import <DropboxSDK/DropboxSDK.h>
+#import "OCUtilities.h"
 
 @implementation OCFile
 
@@ -26,13 +27,15 @@
 @synthesize revision;
 @synthesize isDeleted;
 @synthesize filename;
+@synthesize fileId;
+@synthesize thumbnailData;
 
 @synthesize accountId;
 @synthesize fileType;
 
 
 
--(id) initWithFile:(id) file ofAccountType:(OCCLOUD_TYPE) type andAccountID:(NSString *)accId
+-(id) initWithFile:(id) file WithFileID:(NSString *) fId ofAccountType:(OCCLOUD_TYPE) type inAccountID:(NSString *)accId
 {
     if (self = [super init]) {
         switch (type) {
@@ -64,6 +67,7 @@
                     tobeStoredFile.revision = aFile.revision;
                     tobeStoredFile.isDeleted = aFile.isDeleted;
                     tobeStoredFile.filename = aFile.filename;
+                    tobeStoredFile.fileId = [OCUtilities getUUID];
                     
                     tobeStoredFile.accountId = accId;
                     tobeStoredFile.fileType = type;
@@ -79,6 +83,7 @@
                 self.revision = metadata.revision;
                 self.isDeleted = metadata.isDeleted;
                 self.filename = metadata.filename;
+                self.fileId = fId;
                 
                 self.accountId = accId;
                 self.fileType = type;

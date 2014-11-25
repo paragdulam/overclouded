@@ -32,4 +32,5 @@
 -(void) tableView:(OCTableView *) tableView didSelectFile:(id) file AtIndexPath:(NSIndexPath *) indexPath withDraggingView:(UIView *) aView;
 -(void) tableView:(OCTableView *)tableView isDraggingNowOnIndexPath:(NSIndexPath *) dragIndexPath withStartingIndexPath:(NSIndexPath *)startIndexPath;
 -(void) tableView:(OCTableView *)tableView isDraggingNowOnIndexPath:(NSIndexPath *) dragIndexPath withStartingIndexPath:(NSIndexPath *)startIndexPath WithHoldCounter:(NSInteger) counter;
+-(void) tableView:(OCTableView *)tableView didDropFile:(id)file withStartingIndexPath:(NSIndexPath *) anIndexPath toEndingIndexPath:(NSIndexPath *) otherIndexPath;
 @end

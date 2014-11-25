@@ -18,6 +18,8 @@
 @synthesize tableStyle;
 
 
+
+
 -(id) initWithTableStyle:(UITableViewStyle) style
 {
     if (self = [super init]) {
@@ -41,6 +43,7 @@
     dataTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.navigationController setToolbarHidden:NO];
     [self.navigationController.toolbar setBarTintColor:self.navigationController.navigationBar.barTintColor];
+        
 }
 
 - (void)didReceiveMemoryWarning {

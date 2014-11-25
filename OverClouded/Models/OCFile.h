@@ -28,13 +28,15 @@
     CGFloat revision;
     BOOL isDeleted;
     NSString *filename;
+    NSString *fileId;
+    UIImage *thumbnailData;
     
     NSString *accountId;
     OCCLOUD_TYPE fileType;
 }
 
 
--(id) initWithFile:(id) file ofAccountType:(OCCLOUD_TYPE) type andAccountID:(NSString *)accId;
+-(id) initWithFile:(id) file WithFileID:(NSString *) fId ofAccountType:(OCCLOUD_TYPE) type inAccountID:(NSString *)accId;
 
 @property(nonatomic) BOOL thumbnailExists;
 @property(nonatomic) CGFloat totalBytes;
@@ -51,6 +53,8 @@
 @property(nonatomic) CGFloat revision;
 @property(nonatomic) BOOL isDeleted;
 @property(nonatomic,strong) NSString *filename;
+@property(nonatomic,strong) NSString *fileId;
+@property(nonatomic,strong) UIImage *thumbnailData;
 
 @property(nonatomic,strong) NSString *accountId;
 @property(nonatomic) OCCLOUD_TYPE fileType;

@@ -158,6 +158,11 @@
             draggingView.center = CGPointMake(tableView.center.x,
                                               p.y);
         } completion:^(BOOL finished) {
+            [self.dragTableViewDelegate tableView:self
+                                      didDropFile:[[self.dragTableViewDelegate dataForTableView:self] objectAtIndex:toIndexPath.row]
+                            withStartingIndexPath:fromIndexPath
+                                toEndingIndexPath:toIndexPath];
+            
             [draggingView removeFromSuperview];
             [self.holdTimer invalidate];
             holdCounter = 0;
