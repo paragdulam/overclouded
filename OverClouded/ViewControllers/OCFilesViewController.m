@@ -226,7 +226,7 @@
 {
     OCFile *fromFile = [tableDataArray objectAtIndex:anIndexPath.row];
     OCFile *toFile = [tableDataArray objectAtIndex:otherIndexPath.row];
-    [self.restClient moveFrom:fromFile.path toPath:toFile.path];
+    [self.restClient moveFrom:fromFile.path toPath:[NSString stringWithFormat:@"%@/%@",toFile.path,fromFile.filename]];
 }
 
 
@@ -257,7 +257,14 @@
 
 -(void) restClient:(DBRestClient *)client movedPath:(NSString *)from_path to:(DBMetadata *)result
 {
-    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"path == %@",from_path];
+    NSArray *results = [tableDataArray filteredArrayUsingPredicate:predicate];
+    if ([results count]) {
+        OCFile *file = [results objectAtIndex:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[tableDataArray indexOfObject:file] inSection:0];
+        [tableDataArray removeObject:file];
+        [dataTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
 }
 
 
