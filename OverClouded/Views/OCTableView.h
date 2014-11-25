@@ -26,8 +26,10 @@
 @required
 -(NSArray *) dataForTableView:(OCTableView *) tableView;
 -(UIView *) dragViewForTableView:(OCTableView *) tableView;
+-(BOOL) shouldIndexPath:(NSIndexPath *)indexPath AnimateFor:(OCTableView *) tableView;
 
 @optional
 -(void) tableView:(OCTableView *) tableView didSelectFile:(id) file AtIndexPath:(NSIndexPath *) indexPath withDraggingView:(UIView *) aView;
 -(void) tableView:(OCTableView *)tableView isDraggingNowOnIndexPath:(NSIndexPath *) dragIndexPath withStartingIndexPath:(NSIndexPath *)startIndexPath;
+-(void) tableView:(OCTableView *)tableView isDraggingNowOnIndexPath:(NSIndexPath *) dragIndexPath withStartingIndexPath:(NSIndexPath *)startIndexPath WithHoldCounter:(NSInteger) counter;
 @end

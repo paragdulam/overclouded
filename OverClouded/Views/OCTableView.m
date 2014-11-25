@@ -21,12 +21,15 @@
     NSIndexPath *fromIndexPath;
     NSIndexPath *draggedIndexPath;
     NSIndexPath *toIndexPath;
+    NSTimer *holdTimer;
+    NSInteger holdCounter;
 }
 -(void) enableFileMoveGestureRecognizer;
 
 @property(nonatomic,strong) NSIndexPath *fromIndexPath;
 @property(nonatomic,strong) NSIndexPath *draggedIndexPath;
 @property(nonatomic,strong) NSIndexPath *toIndexPath;
+@property(nonatomic,strong) NSTimer *holdTimer;
 
 @end
 
@@ -34,6 +37,7 @@
 @synthesize fromIndexPath;
 @synthesize draggedIndexPath;
 @synthesize toIndexPath;
+@synthesize holdTimer;
 
 -(void) setDragTableViewDelegate:(id<OCTableViewDelegate>)aDelegate
 {
@@ -70,14 +74,26 @@
 
 -(void) timerFired:(NSTimer *) aTimer
 {
-    NSDictionary *userInfo = [aTimer userInfo];
-    BOOL isDraggingUp = [[userInfo objectForKey:IS_DRAGGING_UP] boolValue];
-    OCTableView *tableView = self;
-    CGFloat contentOffsetY = isDraggingUp ? tableView.contentOffset.y + tableView.rowHeight : tableView.contentOffset.y - tableView.rowHeight;
-    [UIView animateWithDuration:.3f
-                     animations:^{
-                         [tableView setContentOffset:CGPointMake(tableView.contentOffset.x, contentOffsetY)];
-                     } completion:NULL];
+    if ([self.dragTableViewDelegate shouldIndexPath:draggedIndexPath AnimateFor:self]) {
+        holdCounter++;
+        NSLog(@"holdCounter %d",holdCounter);
+        if (holdCounter == 5) {
+            [self.dragTableViewDelegate tableView:self
+                         isDraggingNowOnIndexPath:draggedIndexPath
+                            withStartingIndexPath:fromIndexPath];
+            NSLog(@"called");
+            [aTimer invalidate];
+            holdCounter = 0;
+        } else {
+            [self.dragTableViewDelegate tableView:self
+                         isDraggingNowOnIndexPath:draggedIndexPath
+                            withStartingIndexPath:fromIndexPath
+                                  WithHoldCounter:holdCounter];
+        }
+    } else {
+        [aTimer invalidate];
+        holdCounter = 0;
+    }
 }
 
 
@@ -91,6 +107,7 @@
     NSIndexPath *indPath = [tableView indexPathForRowAtPoint:startPoint];
     if (indPath == nil) {
     } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        holdCounter = 0;
         CGPoint p = [gestureRecognizer locationInView:tableView];
         NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
         self.fromIndexPath = indexPath;
@@ -119,7 +136,10 @@
         //return back with a delegate
         
         id selectedObj = [[self.dragTableViewDelegate dataForTableView:self] objectAtIndex:indexPath.row];
-        [self.dragTableViewDelegate tableView:selectedObj didSelectFile:selectedObj AtIndexPath:fromIndexPath withDraggingView:draggingView];
+        [self.dragTableViewDelegate tableView:self
+                                didSelectFile:selectedObj
+                                  AtIndexPath:fromIndexPath
+                             withDraggingView:draggingView];
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         
@@ -139,29 +159,27 @@
                                               p.y);
         } completion:^(BOOL finished) {
             [draggingView removeFromSuperview];
+            [self.holdTimer invalidate];
+            holdCounter = 0;
         }];
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged){
         
         CGPoint p = [gestureRecognizer locationInView:tableView];
-        CGFloat distanceFromBottom = [tableView contentSize].height - [tableView contentOffset].y;
-
         NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:p];
         if (indexPath.section == fromIndexPath.section &&
             indexPath.row != fromIndexPath.row) {
-            if (!draggedIndexPath) {
+            if (draggedIndexPath.section == indexPath.section &&
+                draggedIndexPath.row != indexPath.row) {
                 self.draggedIndexPath = indexPath;
-                [self.dragTableViewDelegate tableView:self
-                             isDraggingNowOnIndexPath:draggedIndexPath
-                                withStartingIndexPath:fromIndexPath];
-            } else {
-                if (draggedIndexPath.section == indexPath.section &&
-                    draggedIndexPath.row != indexPath.row) {
-                    self.draggedIndexPath = indexPath;
-                    [self.dragTableViewDelegate tableView:self
-                                 isDraggingNowOnIndexPath:draggedIndexPath
-                                    withStartingIndexPath:fromIndexPath];
-                }
+                [self.holdTimer invalidate];
+                holdCounter = 0;
+                self.holdTimer = [NSTimer timerWithTimeInterval:1.f
+                                                         target:self
+                                                       selector:@selector(timerFired:)
+                                                       userInfo:nil
+                                                        repeats:YES];
+                [[NSRunLoop currentRunLoop] addTimer:self.holdTimer forMode:NSDefaultRunLoopMode];
             }
         }
         CGPoint centerPoint = CGPointMake(tableView.center.x,p.y - 30);

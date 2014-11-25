@@ -170,6 +170,17 @@
     return tableDataArray;
 }
 
+-(BOOL) shouldIndexPath:(NSIndexPath *)indexPath AnimateFor:(OCTableView *) tableView
+{
+    BOOL retVal = NO;
+    if (indexPath) {
+        OCFile *file = [tableDataArray objectAtIndex:indexPath.row];
+        retVal = [file isDirectory];
+    }
+    return retVal;
+}
+
+
 
 -(UIView *) dragViewForTableView:(OCTableView *) tableView
 {
@@ -181,6 +192,15 @@
     OCDragView *draggingView = (OCDragView *)aView;
     [draggingView setFile:file];
 }
+
+-(void) tableView:(OCTableView *)tableView isDraggingNowOnIndexPath:(NSIndexPath *) dragIndexPath withStartingIndexPath:(NSIndexPath *)startIndexPath WithHoldCounter:(NSInteger) counter
+{
+    OCFile *file = [tableDataArray objectAtIndex:dragIndexPath.row];
+    if ([file isDirectory]) {
+        [tableView reloadRowsAtIndexPaths:@[dragIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
 
 -(void) tableView:(OCTableView *)tableView isDraggingNowOnIndexPath:(NSIndexPath *) dragIndexPath withStartingIndexPath:(NSIndexPath *)startIndexPath
 {
