@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		331A72E4AD7BF6DF21057B2C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6F6D9D7B66B43A516575DC3 /* libPods.a */; };
+		D14AA3C71A2589A50046A5C9 /* OCCloudsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D14AA3C61A2589A50046A5C9 /* OCCloudsViewController.m */; };
 		D1CA00771A1F276500EC7B24 /* OCTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00761A1F276500EC7B24 /* OCTableView.m */; };
+		D1D364B61A258F35005F0270 /* OCWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D364B51A258F35005F0270 /* OCWebViewController.m */; };
 		F11AEDA01A1B424400270DA4 /* libSDropboxSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F11AED991A1B41AA00270DA4 /* libSDropboxSDK.a */; };
 		F13D40AF1A1E085F0009B89F /* OCDragView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13D40AE1A1E085F0009B89F /* OCDragView.m */; };
 		F15791891A1A12410011B2BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791881A1A12410011B2BD /* main.m */; };
@@ -68,8 +70,12 @@
 /* Begin PBXFileReference section */
 		91CE6D727592284FF91C7C5E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		A6F6D9D7B66B43A516575DC3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D14AA3C51A2589A50046A5C9 /* OCCloudsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCCloudsViewController.h; sourceTree = "<group>"; };
+		D14AA3C61A2589A50046A5C9 /* OCCloudsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCCloudsViewController.m; sourceTree = "<group>"; };
 		D1CA00751A1F276500EC7B24 /* OCTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCTableView.h; sourceTree = "<group>"; };
 		D1CA00761A1F276500EC7B24 /* OCTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCTableView.m; sourceTree = "<group>"; };
+		D1D364B41A258F35005F0270 /* OCWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCWebViewController.h; sourceTree = "<group>"; };
+		D1D364B51A258F35005F0270 /* OCWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCWebViewController.m; sourceTree = "<group>"; };
 		F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DropboxSDK.xcodeproj; path = DropboxSDK/DropboxSDK.xcodeproj; sourceTree = "<group>"; };
 		F13D40AD1A1E085F0009B89F /* OCDragView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCDragView.h; sourceTree = "<group>"; };
 		F13D40AE1A1E085F0009B89F /* OCDragView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCDragView.m; sourceTree = "<group>"; };
@@ -231,6 +237,10 @@
 				F15791B51A1A1EDE0011B2BD /* OCAccountsViewController.m */,
 				F15791B71A1A1F0D0011B2BD /* OCFilesViewController.h */,
 				F15791B81A1A1F0D0011B2BD /* OCFilesViewController.m */,
+				D14AA3C51A2589A50046A5C9 /* OCCloudsViewController.h */,
+				D14AA3C61A2589A50046A5C9 /* OCCloudsViewController.m */,
+				D1D364B41A258F35005F0270 /* OCWebViewController.h */,
+				D1D364B51A258F35005F0270 /* OCWebViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -440,11 +450,13 @@
 				F157918C1A1A12410011B2BD /* AppDelegate.m in Sources */,
 				F16885BB1A1B15E10030FF33 /* OCAccount.m in Sources */,
 				F15791891A1A12410011B2BD /* main.m in Sources */,
+				D14AA3C71A2589A50046A5C9 /* OCCloudsViewController.m in Sources */,
 				D1CA00771A1F276500EC7B24 /* OCTableView.m in Sources */,
 				F13D40AF1A1E085F0009B89F /* OCDragView.m in Sources */,
 				F16885BE1A1B15FD0030FF33 /* OCFile.m in Sources */,
 				F17162311A1B33BC00C749DD /* OCUtilities.m in Sources */,
 				F15791B31A1A1E950011B2BD /* OCBaseTableViewController.m in Sources */,
+				D1D364B61A258F35005F0270 /* OCWebViewController.m in Sources */,
 				F15791B01A1A1E730011B2BD /* OCBaseViewController.m in Sources */,
 				F171622E1A1B2DB500C749DD /* OCAccountController.m in Sources */,
 			);

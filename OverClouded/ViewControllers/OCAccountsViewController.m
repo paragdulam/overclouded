@@ -14,6 +14,7 @@
 #import "OCFileController.h"
 #import "AppDelegate.h"
 #import "OCUtilities.h"
+#import "OCCloudsViewController.h"
 
 
 @interface OCAccountsViewController ()<DBRestClientDelegate>
@@ -151,7 +152,10 @@
 
 -(void)addButtonTapped:(id) sender
 {
-    [[DBSession sharedSession] linkFromController:self];
+    //[[DBSession sharedSession] linkFromController:self];
+    OCCloudsViewController *cloudsViewController = [[OCCloudsViewController alloc] initWithTableStyle:UITableViewStylePlain];
+    UINavigationController *cloudsNavController = [[UINavigationController alloc] initWithRootViewController:cloudsViewController];
+    [self presentViewController:cloudsNavController animated:YES completion:NULL];
 }
 
 
