@@ -37,6 +37,15 @@
     [webView setDelegate:self];
     [self.view addSubview:webView];
     [webView setScalesPageToFit:YES];
+    
+    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    NSHTTPCookie *cookie;
+    for(cookie in [storage cookies]) {
+        if([[cookie domain] rangeOfString:@"dropbox"].location != NSNotFound) {
+            [storage deleteCookie:cookie];
+        }
+    }
+    
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
@@ -51,15 +60,14 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    NSLog(@"requet %@",request);
     NSString *urlString = [request.URL absoluteString];
     if ([urlString hasPrefix:self.redirect_uri]) {
         NSString *trimmedString = [urlString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/?",self.redirect_uri] withString:@""];
-        NSLog(@"trimmed %@",trimmedString);
         NSArray *components = [trimmedString componentsSeparatedByString:@"="];
         if ([self.delegate respondsToSelector:@selector(webViewController:didRecieveAuthorizationCode:)]) {
             if ([components count]) {
-                [self.delegate webViewController:self didRecieveAuthorizationCode:[components lastObject]];
+                [self.delegate webViewController:self
+                     didRecieveAuthorizationCode:[components lastObject]];
             }
         }
     }
