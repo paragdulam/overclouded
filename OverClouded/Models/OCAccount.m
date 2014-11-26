@@ -21,6 +21,7 @@
 @synthesize totalBytes;
 @synthesize userId;
 @synthesize accountId;
+@synthesize access_token;
 
 
 -(id) initWithAccount:(id)account ofType:(OCCLOUD_TYPE) type
@@ -29,15 +30,18 @@
         switch (type) {
             case DROPBOX:
             {
-                DBAccountInfo *info = (DBAccountInfo *)account;
-                self.email = info.email;
-                self.country = info.country;
-                self.displayName = info.displayName;
-                self.normalConsumedBytes = info.quota.normalConsumedBytes;
-                self.sharedConsumedBytes = info.quota.sharedConsumedBytes;
-                self.totalBytes = info.quota.totalBytes;
-                self.userId = info.userId;
+                NSDictionary *info = (NSDictionary *)account;
+                self.email = [info objectForKey:@"email"];
+                self.country = [info objectForKey:@"country"];
+                self.displayName = [info objectForKey:@"display_name"];
+                self.normalConsumedBytes = [[info objectForKey:@"quota_info"] objectForKey:@"normal"];
+                self.sharedConsumedBytes = [[info objectForKey:@"quota_info"] objectForKey:@"shared"];
+                self.totalBytes = [[info objectForKey:@"quota_info"] objectForKey:@"quota"];
+                self.userId = [info objectForKey:@"uid"];
                 self.accountId = [OCUtilities getUUID];
+                
+                self.accountType = [NSNumber numberWithInteger:type];
+                self.access_token = [info objectForKey:@"access_token"];
             }
                 break;
                 

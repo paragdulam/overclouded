@@ -7,7 +7,6 @@
 //
 
 #import "OCAccountsViewController.h"
-#import <DropboxSDK/DropboxSDK.h>
 #import "OCAccount.h"
 #import "OCFile.h"
 #import "OCAccountController.h"
@@ -15,9 +14,10 @@
 #import "AppDelegate.h"
 #import "OCUtilities.h"
 #import "OCCloudsViewController.h"
+#import "OCAppController.h"
 
 
-@interface OCAccountsViewController ()<DBRestClientDelegate,OCCloudsViewControllerDelegate>
+@interface OCAccountsViewController ()<OCCloudsViewControllerDelegate>
 {
     UIBarButtonItem *addButton;
 }
@@ -38,7 +38,8 @@
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButtonTapped:)];
     [self.navigationItem setLeftBarButtonItem:editButton];
     
-    [OCAccountController getAllAccounts:^(NSArray *accounts, NSError *error) {
+    [OCAppController getAllAccountsWithCompletionBlock:^(id response, NSError *error) {
+        NSArray *accounts = (NSArray *)response;
         if (accounts) {
             [self updateTableView:accounts];
             [[NSNotificationCenter defaultCenter] postNotificationName:OC_ALL_ACCOUNTS_READ_NOTIFICATION object:accounts];
@@ -65,10 +66,9 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OCAccount *account = [tableDataArray objectAtIndex:indexPath.row];
-    OCAccountController *accountController = [[OCAccountController alloc] initWithAccount:account];
-    [accountController removeAccountWithCompletionBlock:^(NSError *error) {
+    [OCAppController removeAccount:account
+               WithCompletionBlock:^(NSError *error) {
     }];
-    [[DBSession sharedSession] unlinkUserId:account.userId];
     
     [tableDataArray removeObject:account];
     [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
@@ -86,59 +86,12 @@
     
     OCAccount *account = [tableDataArray objectAtIndex:indexPath.row];
     [cell.textLabel setText:account.displayName];
-    NSString *detailText = [NSString stringWithFormat:@"%.2f GB used out of %.2f GB",account.normalConsumedBytes * pow(10, -9),account.totalBytes * pow(10, -9)];
+    NSString *detailText = [NSString stringWithFormat:@"%.2f GB used out of %.2f GB",[account.normalConsumedBytes longLongValue] * pow(10, -9),[account.totalBytes longLongValue] * pow(10, -9)];
     [cell.detailTextLabel setText:detailText];
     
     return cell;
 }
 
-
-
-#pragma mark - DBRestClientDelegate
-
-
--(void) restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata
-{
-    OCAccount *lastAccount = [tableDataArray lastObject];
-    OCFile *file = [[OCFile alloc] initWithFile:metadata WithFileID:[OCUtilities getUUID] ofAccountType:DROPBOX inAccountID:lastAccount.accountId ];
-    OCFileController *fileController = [[OCFileController alloc] initWithFile:file];
-    [fileController saveWithCompletionBlock:^(OCFile *afile) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:OC_FILES_METADATA_LOAD_END_NOTIFICATION object:file];
-    }];
-}
-
-- (void)restClient:(DBRestClient*)client loadedAccountInfo:(DBAccountInfo*)info
-{
-    [self stopAnimating:addButton];
-    OCAccount *account = [[OCAccount alloc] initWithAccount:info ofType:DROPBOX];
-    OCAccountController *accountController = [[OCAccountController alloc] initWithAccount:account];
-    [accountController saveWithCompletionBlock:^(OCAccount *account) {
-        if (account) {
-            [tableDataArray addObject:account];
-            [self updateTable];
-            [self.restClient loadMetadata:@"/" withHash:nil];
-            [[NSNotificationCenter defaultCenter] postNotificationName:OC_ACCOUNT_ADDED_NOTIFICATION object:account];
-        }
-    }];
-}
-
-
-- (void)restClient:(DBRestClient*)client loadAccountInfoFailedWithError:(NSError*)error
-{
-    [self stopAnimating:addButton];
-}
-
-
-#pragma mark - Dropbox Login Callback
-
--(void)dropboxDidLink
-{
-    self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
-    [self.restClient setDelegate:self];
-    [self.restClient loadAccountInfo];
-    [[NSNotificationCenter defaultCenter] postNotificationName:OC_FILES_METADATA_LOAD_START_NOTIFICATION object:nil];
-    [self startAnimating];
-}
 
 #pragma mark - Helpers
 
@@ -153,6 +106,12 @@
 
 -(void) cloudViewController:(OCCloudsViewController *) vc didRecieveAuthenticationDataDictionary:(NSDictionary *) authDict
 {
+    [OCAppController saveAccountForCredentials:authDict
+                               completionBlock:^(id response, NSError *error) {
+                                   OCAccount *account = (OCAccount *)response;
+                                   [tableDataArray addObject:account];
+                                   [self updateTable];
+                               }];
 }
 
 
@@ -161,11 +120,7 @@
 
 -(void)addButtonTapped:(id) sender
 {
-    //[[DBSession sharedSession] linkFromController:self];
-    OCCloudsViewController *cloudsViewController = [[OCCloudsViewController alloc] initWithTableStyle:UITableViewStylePlain];
-    [cloudsViewController setDelegate:self];
-    UINavigationController *cloudsNavController = [[UINavigationController alloc] initWithRootViewController:cloudsViewController];
-    [self presentViewController:cloudsNavController animated:YES completion:NULL];
+    [OCAppController linkFromController:self];
 }
 
 

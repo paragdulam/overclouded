@@ -11,6 +11,4 @@
 @interface OCAccountsViewController : OCBaseTableViewController
 
 
--(void)dropboxDidLink;
-
 @end

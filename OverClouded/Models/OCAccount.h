@@ -15,26 +15,28 @@
 
 @interface OCAccount : MTLModel
 {
-    OCCLOUD_TYPE accountType;
+    NSNumber *accountType;
     NSString *email;
     NSString *country;
     NSString *displayName;
-    CGFloat normalConsumedBytes;
-    CGFloat sharedConsumedBytes;
-    CGFloat totalBytes;
+    NSNumber *normalConsumedBytes;
+    NSNumber *sharedConsumedBytes;
+    NSNumber *totalBytes;
     NSString *userId;
     NSString *accountId;
+    NSString *access_token;
 }
 
-@property(nonatomic) OCCLOUD_TYPE accountType;
+@property(nonatomic) NSNumber *accountType;
 @property(nonatomic,strong) NSString *email;
 @property(nonatomic,strong) NSString *country;
 @property(nonatomic,strong) NSString *displayName;
-@property(nonatomic) CGFloat normalConsumedBytes;
-@property(nonatomic) CGFloat sharedConsumedBytes;
-@property(nonatomic) CGFloat totalBytes;
+@property(nonatomic) NSNumber *normalConsumedBytes;
+@property(nonatomic) NSNumber *sharedConsumedBytes;
+@property(nonatomic) NSNumber *totalBytes;
 @property(nonatomic,strong) NSString *userId;
 @property(nonatomic,strong) NSString *accountId;
+@property(nonatomic,strong) NSString *access_token;
 
 
 -(id) initWithAccount:(id)account ofType:(OCCLOUD_TYPE) type;

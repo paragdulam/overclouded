@@ -9,11 +9,10 @@
 #import "AppDelegate.h"
 #import "OCAccountsViewController.h"
 #import "OCFilesViewController.h"
-#import <DropboxSDK/DropboxSDK.h>
 #import "OCConstants.h"
 
 
-@interface AppDelegate ()<DBSessionDelegate,DBNetworkRequestDelegate>
+@interface AppDelegate ()
 {
 }
 
@@ -53,31 +52,10 @@
     [self.window setRootViewController:drawerViewController];
     [self.window makeKeyAndVisible];
     
-    
-    
-    NSString* appKey = @"y1hmeaarl6da494";
-    NSString* appSecret = @"4mjdch4itbrvcyh";
-    NSString *root = @"auto";
-    
-    DBSession* session =
-    [[DBSession alloc] initWithAppKey:appKey appSecret:appSecret root:root];
-    session.delegate = self; // DBSessionDelegate methods allow you to handle re-authenticating
-    [DBSession setSharedSession:session];
-    
-    [DBRequest setNetworkRequestDelegate:self];
-
     return YES;
 }
 
 
--(BOOL) application:(UIApplication *)application handleOpenURL:(NSURL *)url
-{
-    BOOL retVal = [[DBSession sharedSession] handleOpenURL:url];
-    if (retVal) {
-        [self.accountsViewController dropboxDidLink];
-    }
-    return retVal;
-}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -100,33 +78,6 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-
-
-
-#pragma mark - Alerts
-
-
-
-#pragma mark - DBSessionDelegate
-
-- (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId
-{
-    
-}
-
-
-#pragma mark - DBNetworkRequestDelegate
-
-- (void)networkRequestStarted
-{
-    
-}
-
-- (void)networkRequestStopped
-{
-    
-}
-
 
 
 @end

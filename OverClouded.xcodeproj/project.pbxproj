@@ -11,6 +11,7 @@
 		D14AA3C71A2589A50046A5C9 /* OCCloudsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D14AA3C61A2589A50046A5C9 /* OCCloudsViewController.m */; };
 		D1CA00771A1F276500EC7B24 /* OCTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00761A1F276500EC7B24 /* OCTableView.m */; };
 		D1D364B61A258F35005F0270 /* OCWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D364B51A258F35005F0270 /* OCWebViewController.m */; };
+		D1D364BE1A25E356005F0270 /* OCAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D364BD1A25E356005F0270 /* OCAppController.m */; };
 		F11AEDA01A1B424400270DA4 /* libSDropboxSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F11AED991A1B41AA00270DA4 /* libSDropboxSDK.a */; };
 		F13D40AF1A1E085F0009B89F /* OCDragView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13D40AE1A1E085F0009B89F /* OCDragView.m */; };
 		F15791891A1A12410011B2BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791881A1A12410011B2BD /* main.m */; };
@@ -76,6 +77,8 @@
 		D1CA00761A1F276500EC7B24 /* OCTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCTableView.m; sourceTree = "<group>"; };
 		D1D364B41A258F35005F0270 /* OCWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCWebViewController.h; sourceTree = "<group>"; };
 		D1D364B51A258F35005F0270 /* OCWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCWebViewController.m; sourceTree = "<group>"; };
+		D1D364BC1A25E356005F0270 /* OCAppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCAppController.h; sourceTree = "<group>"; };
+		D1D364BD1A25E356005F0270 /* OCAppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCAppController.m; sourceTree = "<group>"; };
 		F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DropboxSDK.xcodeproj; path = DropboxSDK/DropboxSDK.xcodeproj; sourceTree = "<group>"; };
 		F13D40AD1A1E085F0009B89F /* OCDragView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCDragView.h; sourceTree = "<group>"; };
 		F13D40AE1A1E085F0009B89F /* OCDragView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCDragView.m; sourceTree = "<group>"; };
@@ -274,6 +277,8 @@
 				F171622D1A1B2DB500C749DD /* OCAccountController.m */,
 				F18D37401A1CA00F00A4B373 /* OCFileController.h */,
 				F18D37411A1CA00F00A4B373 /* OCFileController.m */,
+				D1D364BC1A25E356005F0270 /* OCAppController.h */,
+				D1D364BD1A25E356005F0270 /* OCAppController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -447,6 +452,7 @@
 				F15791B91A1A1F0D0011B2BD /* OCFilesViewController.m in Sources */,
 				F15791B61A1A1EDE0011B2BD /* OCAccountsViewController.m in Sources */,
 				F18D37421A1CA00F00A4B373 /* OCFileController.m in Sources */,
+				D1D364BE1A25E356005F0270 /* OCAppController.m in Sources */,
 				F157918C1A1A12410011B2BD /* AppDelegate.m in Sources */,
 				F16885BB1A1B15E10030FF33 /* OCAccount.m in Sources */,
 				F15791891A1A12410011B2BD /* main.m in Sources */,
@@ -598,6 +604,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -625,6 +632,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
