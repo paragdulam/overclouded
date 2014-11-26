@@ -8,6 +8,20 @@
 
 #import "OCBaseTableViewController.h"
 
+@protocol OCCloudsViewControllerDelegate;
+
 @interface OCCloudsViewController : OCBaseTableViewController
+{
+    __unsafe_unretained id<OCCloudsViewControllerDelegate> delegate;
+}
+
+@property(nonatomic,unsafe_unretained) id<OCCloudsViewControllerDelegate> delegate;
+
+@end
+
+
+@protocol OCCloudsViewControllerDelegate<NSObject>
+
+-(void) cloudViewController:(OCCloudsViewController *) vc didRecieveAuthenticationDataDictionary:(NSDictionary *) authDict;
 
 @end

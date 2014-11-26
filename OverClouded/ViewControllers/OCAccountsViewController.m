@@ -17,7 +17,7 @@
 #import "OCCloudsViewController.h"
 
 
-@interface OCAccountsViewController ()<DBRestClientDelegate>
+@interface OCAccountsViewController ()<DBRestClientDelegate,OCCloudsViewControllerDelegate>
 {
     UIBarButtonItem *addButton;
 }
@@ -148,12 +148,22 @@
     [dataTableView setEditing:NO animated:YES];
 }
 
+
+#pragma mark - OCCloudsViewControllerDelegate
+
+-(void) cloudViewController:(OCCloudsViewController *) vc didRecieveAuthenticationDataDictionary:(NSDictionary *) authDict
+{
+}
+
+
+
 #pragma mark - IBActions
 
 -(void)addButtonTapped:(id) sender
 {
     //[[DBSession sharedSession] linkFromController:self];
     OCCloudsViewController *cloudsViewController = [[OCCloudsViewController alloc] initWithTableStyle:UITableViewStylePlain];
+    [cloudsViewController setDelegate:self];
     UINavigationController *cloudsNavController = [[UINavigationController alloc] initWithRootViewController:cloudsViewController];
     [self presentViewController:cloudsNavController animated:YES completion:NULL];
 }

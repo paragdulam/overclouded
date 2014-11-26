@@ -20,6 +20,7 @@
 @end
 
 @implementation OCCloudsViewController
+@synthesize delegate;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -76,23 +77,33 @@
 -(void) webViewController:(OCWebViewController *) vc didRecieveAuthorizationCode:(NSString *) code
 {
     //Phase 1 of oauth 2.0 is done here
+    NSURL *authURL = nil;
+    NSMutableURLRequest *request = nil;
     switch (vc.type) {
         case DROPBOX:
         {
             NSString *paramString = [NSString stringWithFormat:@"code=%@&grant_type=authorization_code&client_id=%@&client_secret=%@&redirect_uri=%@",code,DROPBOX_APP_KEY,DROPBOX_APP_SECRET_KEY,REDIRECT_URI];
-            NSURL *authURL = [NSURL URLWithString:@"https://api.dropbox.com/1/oauth2/token"];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:authURL];
+            authURL = [NSURL URLWithString:@"https://api.dropbox.com/1/oauth2/token"];
+            request = [NSMutableURLRequest requestWithURL:authURL];
             [request setHTTPBody:[paramString dataUsingEncoding:NSUTF8StringEncoding]];
             [request setHTTPMethod:@"POST"];
-            [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"res %@",responseString);
-            }];
         }
             break;
         default:
             break;
     }
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        NSDictionary *authDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        if ([self.delegate respondsToSelector:@selector(cloudViewController:didRecieveAuthenticationDataDictionary:)]) {
+            NSMutableDictionary *retDict = [NSMutableDictionary dictionary];
+            [retDict addEntriesFromDictionary:authDictionary];
+            [retDict setObject:[NSNumber numberWithInt:vc.type]
+                        forKey:OC_CLOUD_TYPE];
+            [self.delegate cloudViewController:self didRecieveAuthenticationDataDictionary:retDict];
+            [self dismissViewControllerAnimated:YES completion:^{
+            }];
+        }
+    }];
 }
 
 /*
