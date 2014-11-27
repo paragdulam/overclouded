@@ -18,6 +18,8 @@
 @implementation OCAppController
 
 
+#pragma mark - Authentication
+
 +(void) linkFromController:(UIViewController *)vc
 {
     OCCloudsViewController *cloudsViewController = [[OCCloudsViewController alloc] initWithTableStyle:UITableViewStylePlain];
@@ -25,6 +27,8 @@
     UINavigationController *cloudsNavController = [[UINavigationController alloc] initWithRootViewController:cloudsViewController];
     [vc presentViewController:cloudsNavController animated:YES completion:NULL];
 }
+
+#pragma mark - Accounts
 
 +(void) saveAccountForCredentials:(NSDictionary *) authDict
                   completionBlock:(void(^)(id response,NSError *error))completionhandler
@@ -108,6 +112,7 @@
 }
 
 
+#pragma mark - Metadata
 
 +(void) makeRequestForMetadataOfFilePath:(NSString *) filePath
                                inAccount:(OCAccount *) account
@@ -180,6 +185,11 @@
 }
 
 
+#pragma mark - Thumbnails
+#pragma mark - Move
+#pragma mark - Delete
+#pragma mark - Upload
+#pragma mark - Download
 
 
 
