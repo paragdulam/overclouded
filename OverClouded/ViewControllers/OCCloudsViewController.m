@@ -25,10 +25,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self.navigationItem setTitle:@"Cloud"];
     [dataTableView registerClass:[UITableViewCell class]
           forCellReuseIdentifier:@"UITableViewCell"];
     
     [tableDataArray addObject:@"Dropbox"];
+    
+    UIBarButtonItem *cancelBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonTapped:)];
+    [self.navigationItem setLeftBarButtonItem:cancelBarButton];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,11 +41,23 @@
 }
 
 
+#pragma mark - Helpers
+
+-(void)cancelButtonTapped:(id) sender
+{
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+#pragma mark - UITableViewDataSource
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
     [cell.textLabel setText:[tableDataArray objectAtIndex:indexPath.row]];
     return cell;
 }
+
+
+#pragma mark - UITableViewDelegate
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *urlString = nil;

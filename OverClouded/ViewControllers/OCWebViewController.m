@@ -33,6 +33,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    NSString *title = nil;
+    switch (self.type) {
+        case DROPBOX:
+            title = @"Dropbox";
+            break;
+            
+        default:
+            break;
+    }
+    [self.navigationItem setTitle:title];
+    
     webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
     [webView setDelegate:self];
     [self.view addSubview:webView];
@@ -74,14 +86,16 @@
     return YES;
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView
+- (void)webViewDidStartLoad:(UIWebView *)aWebView
 {
     [self startAnimating];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webViewDidFinishLoad:(UIWebView *)aWebView
 {
-    [self stopAnimating:nil];
+    if ([[url absoluteString] isEqualToString:[webView.request.URL absoluteString]]) {
+        [self stopAnimating:nil];
+    }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error

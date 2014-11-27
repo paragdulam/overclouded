@@ -15,6 +15,7 @@
 #import "AppDelegate.h"
 #import "OCDragView.h"
 #import "OCUtilities.h"
+#import "OCAppController.h"
 
 @interface OCFilesViewController ()<DBRestClientDelegate,OCTableViewDelegate>
 {
@@ -23,16 +24,19 @@
 
 -(BOOL) isRootPath;
 
+
 @end
 
 @implementation OCFilesViewController
 @synthesize currentFile;
+@synthesize selectedAccount;
 
 
--(id) initWithFile:(OCFile *) aFile
+-(id) initWithFile:(OCFile *) aFile inAccount:(OCAccount *)accnt
 {
     if (self = [super initWithTableStyle:UITableViewStylePlain]) {
         self.currentFile = aFile;
+        self.selectedAccount = accnt;
     }
     return self;
 }
@@ -51,57 +55,28 @@
     [dataTableView setRowHeight:44.f];
     [dataTableView setDragTableViewDelegate:self];
     
-    if (self.currentFile) {
-        OCFileController *fileController = [[OCFileController alloc] initWithFile:self.currentFile];
-        [fileController getFileMetadataAtPath:currentFile.path
-                                withAccountID:currentFile.accountId
-                              completionBlock:^(OCFile *afile) {
-                                  [self stopAnimating:nil];
-                                  [self updateView:afile];
-                              }];
-        
-        [OCAccountController getAllAccounts:^(NSArray *accounts, NSError *error) {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"accountId == %@",currentFile.accountId];
-            NSArray *results = [accounts filteredArrayUsingPredicate:predicate];
-            if ([results count]) {
-                OCAccount *account = [results objectAtIndex:0];
-                self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession] userId:account.userId];
-                [self.restClient setDelegate:self];
-                [self.restClient loadMetadata:currentFile.path withHash:currentFile.hash];
-                [self startAnimating];
-            }
-        }];
-    }
+    [self loadContents];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:OC_ALL_ACCOUNTS_READ_NOTIFICATION
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      NSArray *accounts = (NSArray *)[note object];
-                                                      for (OCAccount *account in accounts) {
-                                                          OCFileController *fileController = [[OCFileController alloc] init];
-                                                          [fileController getFileMetadataAtPath:@"/"
-                                                                                  withAccountID:account.accountId
-                                                                                completionBlock:^(OCFile *afile) {
-                                                                                    [self stopAnimating:nil];
-                                                                                    [self updateView:afile];
-                                                                                }];
+                                                      NSArray *accounts = [note object];
+                                                      if ([accounts count]) {
+                                                          OCAccount *account = [accounts objectAtIndex:0];
+                                                          self.selectedAccount = account;
+                                                          [OCAppController getFileMetadataForFolderPath:@"/" withAccount:selectedAccount completionBlock:^(id response, NSError *error) {
+                                                              OCFile *aFile = (OCFile *)response;
+                                                              [self updateView:aFile];
+                                                              [self startAnimating];
+                                                              [OCAppController makeRequestForMetadataOfFilePath:@"/" inAccount:selectedAccount completionBlock:^(id response, NSError *error) {
+                                                                  OCFile *file = (OCFile *)response;
+                                                                  [self stopAnimating:nil
+                                                                   ];
+                                                                  [self updateView:file];
+                                                              }];
+                                                          }];
                                                       }
-                                                  }];
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:OC_FILES_METADATA_LOAD_START_NOTIFICATION
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification *note) {
-//                                                      [self startAnimating];
-                                                  }];
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:OC_FILES_METADATA_LOAD_END_NOTIFICATION
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self stopAnimating:nil];
-                                                      [self updateView:[note object]];
                                                   }];
     
     
@@ -111,11 +86,14 @@
                                                   usingBlock:^(NSNotification *note) {
                                                       [self startAnimating];
                                                       OCAccount *account = (OCAccount *)[note object];
-                                                      [headerLabelView setText:[NSString stringWithFormat:@"Loading Files for %@",account.displayName]];
-                                                      self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession] userId:account.userId];
-                                                      [self.restClient setDelegate:self];
+                                                      self.selectedAccount = account;
+                                                      [OCAppController makeRequestForMetadataOfFilePath:@"/" inAccount:selectedAccount completionBlock:^(id response, NSError *error) {
+                                                          OCFile *file = (OCFile *)response;
+                                                          [self stopAnimating:nil
+                                                           ];
+                                                          [self updateView:file];
+                                                      }];
                                                       [self.appDelegate.drawerViewController setCenterViewController:self.appDelegate.filesNavController withCloseAnimation:YES completion:^(BOOL finished) {
-                                                          
                                                       }];
                                                   }];
     
@@ -128,17 +106,19 @@
                                                           [self.appDelegate.filesNavController popToRootViewControllerAnimated:YES];
                                                       }];
 
-                                                      
                                                       OCAccount *account = (OCAccount *)[note object];
-                                                      self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession] userId:account.userId];
-                                                      [self.restClient setDelegate:self];
-                                                      [self.restClient loadMetadata:@"/" withHash:nil];
-                                                      OCFileController *fileController = [[OCFileController alloc] init];
-                                                      [fileController getFileMetadataAtPath:@"/"
-                                                                              withAccountID:account.accountId
-                                                                            completionBlock:^(OCFile *afile) {
-                                                                                [self updateView:afile];
-                                                                            }];
+                                                      self.selectedAccount = account;
+                                                      [OCAppController getFileMetadataForFolderPath:@"/" withAccount:selectedAccount completionBlock:^(id response, NSError *error) {
+                                                          OCFile *aFile = (OCFile *)response;
+                                                          [self updateView:aFile];
+                                                          [self startAnimating];
+                                                          [OCAppController makeRequestForMetadataOfFilePath:@"/" inAccount:selectedAccount completionBlock:^(id response, NSError *error) {
+                                                              OCFile *file = (OCFile *)response;
+                                                              [self stopAnimating:nil
+                                                               ];
+                                                              [self updateView:file];
+                                                          }];
+                                                      }];;
                                                   }];
 
     
@@ -167,9 +147,6 @@
 
 -(void) dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_FILES_METADATA_LOAD_START_NOTIFICATION object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_FILES_METADATA_LOAD_END_NOTIFICATION object:nil];
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_ACCOUNT_ADDED_NOTIFICATION object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:OC_ACCOUNT_REMOVED_NOTIFICATION object:nil];
     
@@ -294,8 +271,26 @@
 }
 
 
+
 #pragma mark - Helpers
 
+
+-(void) loadContents
+{
+    if (currentFile && selectedAccount) {
+        [OCAppController getFileMetadataForFolder:currentFile withAccount:selectedAccount completionBlock:^(id response, NSError *error) {
+            OCFile *file = (OCFile *)response;
+            [self updateView:file];
+            
+            [self startAnimating];
+            [OCAppController makeRequestForMetadataOfFile:currentFile inAccount:selectedAccount completionBlock:^(id response, NSError *error) {
+                OCFile *file = (OCFile *)response;
+                [self stopAnimating:nil];
+                [self updateView:file];
+            }];
+        }];
+    }
+}
 
 
 -(BOOL) isRootPath
@@ -345,7 +340,7 @@
 {
     OCFile *file = [tableDataArray objectAtIndex:indexPath.row];
     if (file.isDirectory) {
-        OCFilesViewController *filesViewController = [[OCFilesViewController alloc] initWithFile:file];
+        OCFilesViewController *filesViewController = [[OCFilesViewController alloc] initWithFile:file inAccount:selectedAccount];
         [self.navigationController pushViewController:filesViewController animated:YES];
     }
 }
@@ -363,11 +358,10 @@
     [cell.textLabel setText:fileName];
     [cell.detailTextLabel setText:file.humanReadableSize];
     UIImage *image = nil;
-    if ([file isDirectory]) {
+    if ([[file isDirectory] boolValue]) {
         image = [UIImage imageNamed:@"folder"];
     } else {
-        NSArray *components = [fileName componentsSeparatedByString:@"."];
-        NSString *extension = [components lastObject];
+        NSString *extension = [fileName pathExtension];
         image = file.thumbnailData;
         if (!image) {
             if ([extension length]) {

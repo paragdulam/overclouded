@@ -38,7 +38,7 @@
     UINavigationController *accountsNavC = [[UINavigationController alloc] initWithRootViewController:self.accountsViewController];
     self.accountsNavController = accountsNavC;
     
-    OCFilesViewController *filesVC = [[OCFilesViewController alloc] initWithTableStyle:UITableViewStylePlain];
+    OCFilesViewController *filesVC = [[OCFilesViewController alloc] initWithFile:nil inAccount:nil];
     self.filesViewController = filesVC;
     UINavigationController *filesNavC = [[UINavigationController alloc] initWithRootViewController:self.filesViewController];
     self.filesNavController = filesNavC;

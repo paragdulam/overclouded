@@ -41,52 +41,56 @@
         switch (type) {
             case DROPBOX:
             {
-                DBMetadata *metadata = (DBMetadata *)file;
-                self.thumbnailExists = metadata.thumbnailExists;
-                self.totalBytes = metadata.totalBytes;
-                self.lastModifiedDate = metadata.lastModifiedDate;
-                self.clientMtime = metadata.clientMtime;
-                self.path = metadata.path;
-                self.isDirectory = metadata.isDirectory;
+                NSDictionary *metadata = (NSDictionary *)file;
+                self.thumbnailExists = [metadata objectForKey:@"thumb_exists"];
+                self.totalBytes = [metadata objectForKey:@"bytes"];
+                self.lastModifiedDate = [metadata objectForKey:@"modified"];
+                self.clientMtime = [metadata objectForKey:@"client_mtime"];
+                self.path = [metadata objectForKey:@"path"];
+                self.isDirectory = [metadata objectForKey:@"is_dir"];
                 
                 NSMutableArray *toBeContents = [[NSMutableArray alloc] init];
-                for (DBMetadata *aFile in metadata.contents) {
+                for (NSDictionary *aFile in [metadata objectForKey:@"contents"]) {
                     OCFile *tobeStoredFile = [[OCFile alloc] init];
-                    tobeStoredFile.thumbnailExists = aFile.thumbnailExists;
-                    tobeStoredFile.totalBytes = aFile.totalBytes;
-                    tobeStoredFile.lastModifiedDate = aFile.lastModifiedDate;
-                    tobeStoredFile.clientMtime = aFile.clientMtime;
-                    tobeStoredFile.path = aFile.path;
-                    tobeStoredFile.isDirectory = aFile.isDirectory;
-                    tobeStoredFile.contents = aFile.contents;
-                    tobeStoredFile.hash = aFile.hash;
-                    tobeStoredFile.humanReadableSize = aFile.humanReadableSize;
-                    tobeStoredFile.root = aFile.root;
-                    tobeStoredFile.icon = aFile.icon;
-                    tobeStoredFile.rev = aFile.rev;
-                    tobeStoredFile.revision = aFile.revision;
-                    tobeStoredFile.isDeleted = aFile.isDeleted;
-                    tobeStoredFile.filename = aFile.filename;
+                    tobeStoredFile.thumbnailExists = [aFile objectForKey:@"thumb_exists"];
+                    tobeStoredFile.totalBytes = [aFile objectForKey:@"bytes"];
+                    tobeStoredFile.lastModifiedDate = [metadata objectForKey:@"modified"];
+                    tobeStoredFile.clientMtime = [aFile objectForKey:@"client_mtime"];
+                    tobeStoredFile.path = [aFile objectForKey:@"path"];
+                    tobeStoredFile.isDirectory = [aFile objectForKey:@"is_dir"];
+                    tobeStoredFile.contents = [aFile objectForKey:@"contents"];
+                    tobeStoredFile.hash = [aFile objectForKey:@"hash"];
+                    tobeStoredFile.humanReadableSize = [aFile objectForKey:@"size"];
+                    tobeStoredFile.root = [aFile objectForKey:@"root"];
+                    tobeStoredFile.icon = [aFile objectForKey:@"icon"];
+                    tobeStoredFile.rev = [aFile objectForKey:@"rev"];
+                    tobeStoredFile.revision = [aFile objectForKey:@"revision"];
+                    tobeStoredFile.isDeleted = [aFile objectForKey:@"is_deleted"];
+                    
+                    tobeStoredFile.filename = [[aFile objectForKey:@"path"] lastPathComponent];
+                    
                     tobeStoredFile.fileId = [OCUtilities getUUID];
                     
                     tobeStoredFile.accountId = accId;
-                    tobeStoredFile.fileType = type;
+                    tobeStoredFile.fileType = [NSNumber numberWithInt:type];
 
                     [toBeContents addObject:tobeStoredFile];
                 }
                 self.contents = toBeContents;
-                self.hash = metadata.hash;
-                self.humanReadableSize = metadata.humanReadableSize;
-                self.root = metadata.root;
-                self.icon = metadata.icon;
-                self.rev = metadata.rev;
-                self.revision = metadata.revision;
-                self.isDeleted = metadata.isDeleted;
-                self.filename = metadata.filename;
+                self.hash = [metadata objectForKey:@"hash"];
+                self.humanReadableSize = [metadata objectForKey:@"size"];
+                self.root = [metadata objectForKey:@"root"];
+                self.icon = [metadata objectForKey:@"icon"];
+                self.rev = [metadata objectForKey:@"rev"];
+                self.revision = [metadata objectForKey:@"revision"];
+                self.isDeleted = [metadata objectForKey:@"is_deleted"];
+                
+                self.filename = [[metadata objectForKey:@"path"] lastPathComponent];
+                
                 self.fileId = fId;
                 
                 self.accountId = accId;
-                self.fileType = type;
+                self.fileType = [NSNumber numberWithInt:type];
             }
                 break;
             default:

@@ -13,50 +13,50 @@
 
 @interface OCFile : MTLModel
 {
-    BOOL thumbnailExists;
-    CGFloat totalBytes;
+    NSNumber * thumbnailExists;
+    NSNumber * totalBytes;
     NSDate *lastModifiedDate;
     NSDate *clientMtime;
     NSString *path;
-    BOOL isDirectory;
+    NSNumber * isDirectory;
     NSArray *contents;
     NSString *hash;
     NSString *humanReadableSize;
     NSString *root;
     NSString *icon;
     NSString *rev;
-    CGFloat revision;
-    BOOL isDeleted;
+    NSNumber *revision;
+    NSNumber *isDeleted;
     NSString *filename;
     NSString *fileId;
     UIImage *thumbnailData;
     
     NSString *accountId;
-    OCCLOUD_TYPE fileType;
+    NSNumber * fileType;
 }
 
 
 -(id) initWithFile:(id) file WithFileID:(NSString *) fId ofAccountType:(OCCLOUD_TYPE) type inAccountID:(NSString *)accId;
 
-@property(nonatomic) BOOL thumbnailExists;
-@property(nonatomic) CGFloat totalBytes;
+@property(nonatomic) NSNumber *thumbnailExists;
+@property(nonatomic) NSNumber *totalBytes;
 @property(nonatomic,strong) NSDate *lastModifiedDate;
 @property(nonatomic,strong) NSDate *clientMtime;
 @property(nonatomic,strong) NSString *path;
-@property(nonatomic) BOOL isDirectory;
+@property(nonatomic) NSNumber *isDirectory;
 @property(nonatomic,strong) NSArray *contents;
 @property(nonatomic,strong) NSString *hash;
 @property(nonatomic,strong) NSString *humanReadableSize;
 @property(nonatomic,strong) NSString *root;
 @property(nonatomic,strong) NSString *icon;
 @property(nonatomic,strong) NSString *rev;
-@property(nonatomic) CGFloat revision;
-@property(nonatomic) BOOL isDeleted;
+@property(nonatomic) NSNumber *revision;
+@property(nonatomic) NSNumber *isDeleted;
 @property(nonatomic,strong) NSString *filename;
 @property(nonatomic,strong) NSString *fileId;
 @property(nonatomic,strong) UIImage *thumbnailData;
 
 @property(nonatomic,strong) NSString *accountId;
-@property(nonatomic) OCCLOUD_TYPE fileType;
+@property(nonatomic) NSNumber * fileType;
 
 @end

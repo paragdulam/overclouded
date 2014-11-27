@@ -70,11 +70,10 @@
 {
     UIImage *image = nil;
     NSString *fileName = file.filename;
-    if ([file isDirectory]) {
+    if ([[file isDirectory] boolValue]) {
         image = [UIImage imageNamed:@"folder"];
     } else {
-        NSArray *components = [fileName componentsSeparatedByString:@"."];
-        NSString *extension = [components lastObject];
+        NSString *extension = [fileName pathExtension];
         if ([extension length]) {
             image = [UIImage imageNamed:[extension lowercaseString]];
             if (!image) {

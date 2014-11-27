@@ -111,6 +111,7 @@
                                    OCAccount *account = (OCAccount *)response;
                                    [tableDataArray addObject:account];
                                    [self updateTable];
+                                   [[NSNotificationCenter defaultCenter] postNotificationName:OC_ACCOUNT_ADDED_NOTIFICATION object:account];
                                }];
 }
 
