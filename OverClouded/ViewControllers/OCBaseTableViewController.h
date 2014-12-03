@@ -19,7 +19,6 @@
 
 -(id) initWithTableStyle:(UITableViewStyle) style;
 @property (nonatomic) UITableViewStyle tableStyle;
-@property (nonatomic,strong) DBRestClient *restClient;
 
 
 -(void)updateTableView:(NSArray *) anArray;

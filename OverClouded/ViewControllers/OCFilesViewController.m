@@ -16,6 +16,7 @@
 #import "OCDragView.h"
 #import "OCUtilities.h"
 #import "OCAppController.h"
+#import "OCFileTableViewCell.h"
 
 @interface OCFilesViewController ()<DBRestClientDelegate,OCTableViewDelegate>
 {
@@ -76,6 +77,11 @@
                                                                   [self updateView:file];
                                                               }];
                                                           }];
+                                                      } else {
+                                                          [self.navigationItem setTitle:@"OverClouded"];
+                                                          [headerLabelView setTextAlignment:NSTextAlignmentCenter];
+                                                          [headerLabelView setText:@"Swipe Right to add Accounts"];
+                                                          [dataTableView setTableHeaderView:headerLabelView];
                                                       }
                                                   }];
     
@@ -126,17 +132,10 @@
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      OCAccount *account = (OCAccount *)[note object];
-                                                      NSPredicate *predicate = [NSPredicate predicateWithFormat:@"accountId == %@",account.accountId];
-                                                      NSArray *filteredFiles = [tableDataArray filteredArrayUsingPredicate:predicate];
-                                                      [tableDataArray removeObjectsInArray:filteredFiles];
-                                                      [self updateTable];
-                                                      if (![tableDataArray count]) {
-                                                          [self.navigationItem setTitle:@"OverClouded"];
-                                                          [headerLabelView setTextAlignment:NSTextAlignmentCenter];
-                                                          [headerLabelView setText:@"Swipe Right to add Accounts"];
-                                                          [dataTableView setTableHeaderView:headerLabelView];
-                                                      }
+                                                      [OCAppController getAllAccountsWithCompletionBlock:^(id response, NSError *error) {
+                                                          NSArray *accounts = (NSArray *)response;
+                                                          [[NSNotificationCenter defaultCenter] postNotificationName:OC_ALL_ACCOUNTS_READ_NOTIFICATION object:accounts];
+                                                      }];
                                                   }];
 }
 
@@ -201,75 +200,7 @@
 
 -(void) tableView:(OCTableView *)tableView didDropFile:(id)file withStartingIndexPath:(NSIndexPath *)anIndexPath toEndingIndexPath:(NSIndexPath *)otherIndexPath
 {
-    OCFile *fromFile = [tableDataArray objectAtIndex:anIndexPath.row];
-    OCFile *toFile = [tableDataArray objectAtIndex:otherIndexPath.row];
-    [self.restClient moveFrom:fromFile.path toPath:[NSString stringWithFormat:@"%@/%@",toFile.path,fromFile.filename]];
 }
-
-
-#pragma mark - DBRestClientDelegate
-
-
--(void) restClient:(DBRestClient *)client loadedThumbnail:(NSString *)destPath metadata:(DBMetadata *)metadata
-{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"path == %@",metadata.path];
-    NSArray *results = [tableDataArray filteredArrayUsingPredicate:predicate];
-    if ([results count]) {
-        OCFile *file = [results objectAtIndex:0];
-        file.thumbnailData = [UIImage imageWithContentsOfFile:destPath];
-        OCFileController *fileController = [[OCFileController alloc] initWithFile:currentFile];
-        [fileController saveWithCompletionBlock:^(OCFile *afile) {
-            NSInteger index = [tableDataArray indexOfObject:file];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-            [dataTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }];
-    }
-}
-
--(void) restClient:(DBRestClient *)client loadThumbnailFailedWithError:(NSError *)error
-{
-    
-}
-
-
--(void) restClient:(DBRestClient *)client movedPath:(NSString *)from_path to:(DBMetadata *)result
-{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"path == %@",from_path];
-    NSArray *results = [tableDataArray filteredArrayUsingPredicate:predicate];
-    if ([results count]) {
-        OCFile *file = [results objectAtIndex:0];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[tableDataArray indexOfObject:file] inSection:0];
-        [tableDataArray removeObject:file];
-        [dataTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
-    }
-}
-
-
--(void) restClient:(DBRestClient *)client movePathFailedWithError:(NSError *)error
-{
-    
-}
-
-- (void)restClient:(DBRestClient*)client loadedMetadata:(DBMetadata*)metadata
-{
-    OCFile *aFile = [[OCFile alloc] initWithFile:metadata WithFileID:currentFile.fileId ofAccountType:DROPBOX inAccountID:currentFile.accountId];
-    OCFileController *fileController = [[OCFileController alloc] initWithFile:aFile];
-    [fileController saveWithCompletionBlock:^(OCFile *afile) {
-        [self stopAnimating:nil];
-        [self updateView:aFile];
-    }];
-}
-
-- (void)restClient:(DBRestClient*)client metadataUnchangedAtPath:(NSString*)path
-{
-    [self stopAnimating:nil];
-}
-
-- (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError*)error
-{
-    [self stopAnimating:nil];
-}
-
 
 
 #pragma mark - Helpers
@@ -309,11 +240,25 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"thumbnailExists	== %@",[NSNumber numberWithBool:YES]];
     NSArray *thumbnailFiles = [file.contents filteredArrayUsingPredicate:predicate];
     
-    for (OCFile *file in thumbnailFiles) {
-        NSString *thumbnailPath = [NSString stringWithFormat:@"%@/%@/%@",[OCUtilities getAccountsPath],file.accountId,file.fileId];
-        [self.restClient loadThumbnail:file.path ofSize:@"small" intoPath:thumbnailPath];
+    for (OCFile *thumbFile in thumbnailFiles) {
+        if (!thumbFile.thumbnailData) {
+            [OCAppController makeRequestForThumbnailForFile:thumbFile
+                                                  inAccount:selectedAccount withCompletionBlock:^(id response, NSError *error) {
+                                                      OCFile *aFile = (OCFile *)response;
+                                                      NSInteger index = -1;
+                                                      NSPredicate *predicate = [NSPredicate predicateWithFormat:@"fileId == %@",aFile.fileId];
+                                                      NSArray *results = [tableDataArray filteredArrayUsingPredicate:predicate];
+                                                      if ([results count]) {
+                                                          OCFile *file = [results objectAtIndex:0];
+                                                          index = [tableDataArray indexOfObject:file];
+                                                          [tableDataArray replaceObjectAtIndex:index withObject:aFile];
+                                                          NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+                                                          [dataTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                                                      }
+                                                      
+                                                  }];
+        }
     }
-    
     [self updateTableView:file.contents];
 }
 
@@ -339,7 +284,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OCFile *file = [tableDataArray objectAtIndex:indexPath.row];
-    if (file.isDirectory) {
+    if ([file.isDirectory boolValue]) {
         OCFilesViewController *filesViewController = [[OCFilesViewController alloc] initWithFile:file inAccount:selectedAccount];
         [self.navigationController pushViewController:filesViewController animated:YES];
     }
@@ -351,7 +296,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    OCFileTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OCFileTableViewCell"];
+    if (!cell) {
+        cell = [[OCFileTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"OCFileTableViewCell"];
+    }
     
     OCFile *file = [tableDataArray objectAtIndex:indexPath.row];
     NSString *fileName = file.filename;

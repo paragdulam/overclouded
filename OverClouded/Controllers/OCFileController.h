@@ -23,6 +23,8 @@ typedef void (^fileCompletionBlock)(OCFile *afile);
 
 -(void) saveWithCompletionBlock:(fileCompletionBlock)completionHandler;
 -(void) getFileMetadataAtPath:(NSString *) path withAccountID:(NSString *)accID completionBlock:(fileCompletionBlock)completionHandler;
+-(void) getThumbnailForFile:(OCFile *) afile withCompletionBlock:(void(^)(id response,NSError *error))completionHandler;
+
 
 
 @end

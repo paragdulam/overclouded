@@ -39,6 +39,7 @@ typedef enum OCMESSAGE_TYPE {
 #define OC_ROOT_FOLDER_NAME @"Home"
 
 #define OC_CLOUD_TYPE @"cloud_type"
+#define OC_AUTH_CODE @"auth_code"
 
 
 #endif

@@ -122,7 +122,7 @@
         draggingView.center = p;
         
         CGPoint centerPoint = CGPointMake(tableView.center.x,
-                                          p.y - 30);
+                                          p.y - 100);
         
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:.3f];
@@ -187,7 +187,7 @@
                 [[NSRunLoop currentRunLoop] addTimer:self.holdTimer forMode:NSDefaultRunLoopMode];
             }
         }
-        CGPoint centerPoint = CGPointMake(tableView.center.x,p.y - 30);
+        CGPoint centerPoint = CGPointMake(tableView.center.x,p.y - 100);
         draggingView.center = centerPoint;
         
         CGRect boundingRect = CGRectMake(tableView.contentOffset.x,

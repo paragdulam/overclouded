@@ -69,7 +69,9 @@
                     
                     tobeStoredFile.filename = [[aFile objectForKey:@"path"] lastPathComponent];
                     
-                    tobeStoredFile.fileId = [OCUtilities getUUID];
+                    if (!tobeStoredFile.fileId) {
+                        tobeStoredFile.fileId = [OCUtilities getUUID];
+                    }
                     
                     tobeStoredFile.accountId = accId;
                     tobeStoredFile.fileType = [NSNumber numberWithInt:type];

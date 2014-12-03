@@ -41,6 +41,12 @@
 }
 
 
+-(void) getThumbnailForFile:(OCFile *) afile withCompletionBlock:(void(^)(id response,NSError *error))completionHandler
+{
+    
+}
+
+
 -(void) storeOCFileInDBWithCompletionBlock:(fileCompletionBlock)completionHandler
 {
     YapDatabase *database = [[YapDatabase alloc] initWithPath:[self filedbPathForAccountID:self.file.accountId]];

@@ -25,6 +25,7 @@
     NSString *userId;
     NSString *accountId;
     NSString *access_token;
+    NSString *auth_code;
 }
 
 @property(nonatomic) NSNumber *accountType;
@@ -37,6 +38,7 @@
 @property(nonatomic,strong) NSString *userId;
 @property(nonatomic,strong) NSString *accountId;
 @property(nonatomic,strong) NSString *access_token;
+@property(nonatomic,strong) NSString *auth_code;
 
 
 -(id) initWithAccount:(id)account ofType:(OCCLOUD_TYPE) type;

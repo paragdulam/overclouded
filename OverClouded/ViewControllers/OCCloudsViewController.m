@@ -113,6 +113,7 @@
         if ([self.delegate respondsToSelector:@selector(cloudViewController:didRecieveAuthenticationDataDictionary:)]) {
             NSMutableDictionary *retDict = [NSMutableDictionary dictionary];
             [retDict addEntriesFromDictionary:authDictionary];
+            [retDict setObject:code forKey:OC_AUTH_CODE];
             [retDict setObject:[NSNumber numberWithInt:vc.type]
                         forKey:OC_CLOUD_TYPE];
             [self.delegate cloudViewController:self didRecieveAuthenticationDataDictionary:retDict];

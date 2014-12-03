@@ -100,7 +100,7 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 /*

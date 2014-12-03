@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		331A72E4AD7BF6DF21057B2C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6F6D9D7B66B43A516575DC3 /* libPods.a */; };
 		D14AA3C71A2589A50046A5C9 /* OCCloudsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D14AA3C61A2589A50046A5C9 /* OCCloudsViewController.m */; };
+		D161BD021A2FA259005BF778 /* OCFileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D161BD011A2FA259005BF778 /* OCFileTableViewCell.m */; };
 		D1CA00771A1F276500EC7B24 /* OCTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00761A1F276500EC7B24 /* OCTableView.m */; };
 		D1D364B61A258F35005F0270 /* OCWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D364B51A258F35005F0270 /* OCWebViewController.m */; };
 		D1D364BE1A25E356005F0270 /* OCAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D364BD1A25E356005F0270 /* OCAppController.m */; };
-		F11AEDA01A1B424400270DA4 /* libSDropboxSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F11AED991A1B41AA00270DA4 /* libSDropboxSDK.a */; };
 		F13D40AF1A1E085F0009B89F /* OCDragView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13D40AE1A1E085F0009B89F /* OCDragView.m */; };
 		F15791891A1A12410011B2BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F15791881A1A12410011B2BD /* main.m */; };
 		F157918C1A1A12410011B2BD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F157918B1A1A12410011B2BD /* AppDelegate.m */; };
@@ -31,34 +31,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F11AED961A1B41AA00270DA4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D3196B831412FE180060E7C6;
-			remoteInfo = DropboxSDK;
-		};
-		F11AED981A1B41AA00270DA4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D3933BE5145F12AD00E15FA7;
-			remoteInfo = SDropboxSDK;
-		};
-		F11AED9A1A1B41AA00270DA4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D36931CC15088350003FBA23;
-			remoteInfo = DropboxOSX;
-		};
-		F11AED9D1A1B41DA00270DA4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D3196B821412FE180060E7C6;
-			remoteInfo = DropboxSDK;
-		};
 		F157919D1A1A12420011B2BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F157917B1A1A12410011B2BD /* Project object */;
@@ -73,13 +45,14 @@
 		A6F6D9D7B66B43A516575DC3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AA3C51A2589A50046A5C9 /* OCCloudsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCCloudsViewController.h; sourceTree = "<group>"; };
 		D14AA3C61A2589A50046A5C9 /* OCCloudsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCCloudsViewController.m; sourceTree = "<group>"; };
+		D161BD001A2FA259005BF778 /* OCFileTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCFileTableViewCell.h; sourceTree = "<group>"; };
+		D161BD011A2FA259005BF778 /* OCFileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCFileTableViewCell.m; sourceTree = "<group>"; };
 		D1CA00751A1F276500EC7B24 /* OCTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCTableView.h; sourceTree = "<group>"; };
 		D1CA00761A1F276500EC7B24 /* OCTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCTableView.m; sourceTree = "<group>"; };
 		D1D364B41A258F35005F0270 /* OCWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCWebViewController.h; sourceTree = "<group>"; };
 		D1D364B51A258F35005F0270 /* OCWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCWebViewController.m; sourceTree = "<group>"; };
 		D1D364BC1A25E356005F0270 /* OCAppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCAppController.h; sourceTree = "<group>"; };
 		D1D364BD1A25E356005F0270 /* OCAppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCAppController.m; sourceTree = "<group>"; };
-		F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DropboxSDK.xcodeproj; path = DropboxSDK/DropboxSDK.xcodeproj; sourceTree = "<group>"; };
 		F13D40AD1A1E085F0009B89F /* OCDragView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCDragView.h; sourceTree = "<group>"; };
 		F13D40AE1A1E085F0009B89F /* OCDragView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCDragView.m; sourceTree = "<group>"; };
 		F15791831A1A12410011B2BD /* OverClouded.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OverClouded.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,7 +93,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F11AEDA01A1B424400270DA4 /* libSDropboxSDK.a in Frameworks */,
 				331A72E4AD7BF6DF21057B2C /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -144,6 +116,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		D161BCFF1A2FA233005BF778 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				D161BD001A2FA259005BF778 /* OCFileTableViewCell.h */,
+				D161BD011A2FA259005BF778 /* OCFileTableViewCell.m */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		F0BFC1586571790D1BE1F8B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,20 +133,9 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F11AED911A1B41AA00270DA4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F11AED971A1B41AA00270DA4 /* DropboxSDK.framework */,
-				F11AED991A1B41AA00270DA4 /* libSDropboxSDK.a */,
-				F11AED9B1A1B41AA00270DA4 /* DropboxOSX.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		F157917A1A1A12410011B2BD = {
 			isa = PBXGroup;
 			children = (
-				F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */,
 				F15791AC1A1A17550011B2BD /* Podfile */,
 				F15791851A1A12410011B2BD /* OverClouded */,
 				F157919F1A1A12420011B2BD /* OverCloudedTests */,
@@ -194,6 +164,7 @@
 				F157918B1A1A12410011B2BD /* AppDelegate.m */,
 				F15791931A1A12410011B2BD /* Images.xcassets */,
 				F15791951A1A12410011B2BD /* LaunchScreen.xib */,
+				D161BCFF1A2FA233005BF778 /* Cells */,
 				F15791861A1A12410011B2BD /* Supporting Files */,
 				F16885B81A1B15BC0030FF33 /* Controllers */,
 				F15791BA1A1A283E0011B2BD /* Models */,
@@ -299,7 +270,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				F11AED9E1A1B41DA00270DA4 /* PBXTargetDependency */,
 			);
 			name = OverClouded;
 			productName = OverClouded;
@@ -354,12 +324,6 @@
 			mainGroup = F157917A1A1A12410011B2BD;
 			productRefGroup = F15791841A1A12410011B2BD /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = F11AED911A1B41AA00270DA4 /* Products */;
-					ProjectRef = F11AED901A1B41AA00270DA4 /* DropboxSDK.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				F15791821A1A12410011B2BD /* OverClouded */,
@@ -367,30 +331,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		F11AED971A1B41AA00270DA4 /* DropboxSDK.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = DropboxSDK.framework;
-			remoteRef = F11AED961A1B41AA00270DA4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		F11AED991A1B41AA00270DA4 /* libSDropboxSDK.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSDropboxSDK.a;
-			remoteRef = F11AED981A1B41AA00270DA4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		F11AED9B1A1B41AA00270DA4 /* DropboxOSX.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = DropboxOSX.framework;
-			remoteRef = F11AED9A1A1B41AA00270DA4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F15791811A1A12410011B2BD /* Resources */ = {
@@ -456,6 +396,7 @@
 				F157918C1A1A12410011B2BD /* AppDelegate.m in Sources */,
 				F16885BB1A1B15E10030FF33 /* OCAccount.m in Sources */,
 				F15791891A1A12410011B2BD /* main.m in Sources */,
+				D161BD021A2FA259005BF778 /* OCFileTableViewCell.m in Sources */,
 				D14AA3C71A2589A50046A5C9 /* OCCloudsViewController.m in Sources */,
 				D1CA00771A1F276500EC7B24 /* OCTableView.m in Sources */,
 				F13D40AF1A1E085F0009B89F /* OCDragView.m in Sources */,
@@ -479,11 +420,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F11AED9E1A1B41DA00270DA4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = DropboxSDK;
-			targetProxy = F11AED9D1A1B41DA00270DA4 /* PBXContainerItemProxy */;
-		};
 		F157919E1A1A12420011B2BD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F15791821A1A12410011B2BD /* OverClouded */;

@@ -28,5 +28,10 @@
 
 +(void) makeRequestForMetadataOfFile:(OCFile *) file inAccount:(OCAccount *) account completionBlock:(void(^)(id response,NSError *error))completionHandler;
 
++(void) makeRequestForThumbnailForFile:(OCFile *) afile
+                             inAccount:(OCAccount *) account
+                   withCompletionBlock:(void(^)(id response,NSError *error))completionHandler;
+
+
 
 @end

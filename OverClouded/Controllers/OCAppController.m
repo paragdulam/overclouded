@@ -186,6 +186,49 @@
 
 
 #pragma mark - Thumbnails
+
+
++(void) makeRequestForThumbnailForFile:(OCFile *) afile
+                             inAccount:(OCAccount *) account
+                   withCompletionBlock:(void(^)(id response,NSError *error))completionHandler {
+    NSURL *thumbnailURL = nil;
+    NSDictionary *params = nil;
+    NSMutableURLRequest *request = nil;
+
+    switch ([afile.fileType integerValue]) {
+        case DROPBOX:
+        {
+            NSMutableString *thumbnailURLString = [NSMutableString stringWithString:@"https://api-content.dropbox.com/1/thumbnails/auto/"];
+            [thumbnailURLString appendString:[NSString stringWithFormat:@"%@",afile.path]];
+            [thumbnailURLString appendString:@"?"];
+            params = @{@"size":@"s",@"access_token":account.access_token};
+            NSArray *keys = [params allKeys];
+            for (NSString *key in keys) {
+                [thumbnailURLString appendFormat:@"%@=%@",key,[params objectForKey:key]];
+                if (![[keys lastObject] isEqualToString:key]) {
+                    [thumbnailURLString appendString:@"&"];
+                }
+            }
+            thumbnailURL = [NSURL URLWithString:[thumbnailURLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            request = [NSMutableURLRequest requestWithURL:thumbnailURL];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        afile.thumbnailData = [UIImage imageWithData:data];
+        OCFileController *fileController = [[OCFileController alloc] initWithFile:afile];
+        completionHandler(afile,nil);
+        [fileController saveWithCompletionBlock:^(OCFile *afile) {
+            
+        }];
+    }];
+}
+
+
+#pragma mark - Create Folder
 #pragma mark - Move
 #pragma mark - Delete
 #pragma mark - Upload

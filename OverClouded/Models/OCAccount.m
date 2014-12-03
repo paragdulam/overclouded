@@ -22,9 +22,10 @@
 @synthesize userId;
 @synthesize accountId;
 @synthesize access_token;
+@synthesize auth_code;
 
 
--(id) initWithAccount:(id)account ofType:(OCCLOUD_TYPE) type
+-(id) initWithAccount:(id)account ofType:(OCCLOUD_TYPE) type 
 {
     if (self = [super init]) {
         switch (type) {
@@ -42,6 +43,7 @@
                 
                 self.accountType = [NSNumber numberWithInteger:type];
                 self.access_token = [info objectForKey:@"access_token"];
+                self.auth_code = [info objectForKey:OC_AUTH_CODE];
             }
                 break;
                 
